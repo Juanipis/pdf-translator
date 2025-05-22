@@ -26,6 +26,7 @@
     "switchToSelectMode": "Switch to selection mode",
     "selectMode": "Selection Mode",
     "panMode": "Navigation Mode",
+    "processingOcr": "Processing image with OCR...",
     "emptyState": {
       "title": "No PDF Document",
       "description": "Upload a PDF document to get started"
@@ -49,7 +50,17 @@
     "retranslate": "Translate Again",
     "copyToClipboard": "Copy to clipboard",
     "copied": "Copied!",
+    "translatedTextTitle": "Translated Text",
+    "notTranslatedYet": "Not translated yet",
+    "share": "Share",
+    "extractTextFromImage": "Extract Text",
+    "ocrError": {
+      "noTextFound": "No text could be found in the image",
+      "processingFailed": "OCR processing failed"
+    },
     "shareTranslation": "Share translation",
+    "copy": "Copy to clipboard",
+    "translationError": "Error occurred during translation",
     "emptyState": {
       "noDocument": {
         "title": "No Document Loaded",

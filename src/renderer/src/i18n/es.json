@@ -50,6 +50,7 @@
     "copyToClipboard": "Copiar al portapapeles",
     "copied": "¡Copiado!",
     "shareTranslation": "Compartir traducción",
+    "extractTextFromImage": "Extraer Texto",
     "emptyState": {
       "noDocument": {
         "title": "Sin Documento Cargado",

@@ -135,6 +135,7 @@ export function Layout(): React.ReactElement {
             extractedText={extractedText}
             extractedImage={extractedImage}
             hasActiveDocument={!!selectedFile}
+            setExtractedText={handleTextExtracted}
           />
         </Box>
       </Flex>

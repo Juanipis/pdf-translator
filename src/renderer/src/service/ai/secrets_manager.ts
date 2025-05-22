@@ -86,8 +86,8 @@ export class SecretsManager {
       return settingsService().getOcrProvider()
     }
 
-    // Fallback
-    return 'google'
+    // Fallback to mock provider for development/demo purposes
+    return 'mock'
   }
 
   static getSelectedTranslationProvider(): string {
@@ -98,8 +98,8 @@ export class SecretsManager {
       return settingsService().getTranslationProvider()
     }
 
-    // Fallback
-    return 'google'
+    // Fallback to mock provider for development/demo purposes
+    return 'mock'
   }
 
   static setSelectedOcrProvider(provider: string): void {

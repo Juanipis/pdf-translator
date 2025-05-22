@@ -173,16 +173,18 @@ export function SettingsDialog(): React.ReactElement {
         </IconButton>
       </Dialog.Trigger>
       <Dialog.Content style={{ maxWidth: 500 }}>
-        <Flex justify="between" align="center" mb="4">
-          <Heading size="4" as="h2">
-            {t('settings.title')}
-          </Heading>
-          <Dialog.Close>
-            <IconButton variant="ghost" color="gray" aria-label={t('settings.closeButton')}>
-              <CloseIcon size={16} />
-            </IconButton>
-          </Dialog.Close>
-        </Flex>
+        <Dialog.Title asChild>
+          <Flex justify="between" align="center" mb="4">
+            <Heading size="4" as="h2">
+              {t('settings.title')}
+            </Heading>
+            <Dialog.Close>
+              <IconButton variant="ghost" color="gray" aria-label={t('settings.closeButton')}>
+                <CloseIcon size={16} />
+              </IconButton>
+            </Dialog.Close>
+          </Flex>
+        </Dialog.Title>
 
         <Tabs.Root defaultValue="general">
           <Tabs.List>

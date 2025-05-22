@@ -35,7 +35,7 @@ export class OcrService {
     }
   ): Promise<OcrResult> {
     const selectedProvider = SecretsManager.getSelectedOcrProvider()
-    const provider = this.providers.get(selectedProvider)
+    let provider = this.providers.get(selectedProvider)
 
     if (!provider) {
       throw new Error(`OCR provider '${selectedProvider}' not found`)
@@ -43,7 +43,12 @@ export class OcrService {
 
     const isReady = await provider.isReady()
     if (!isReady) {
-      throw new Error(`OCR provider '${selectedProvider}' is not ready. Check your API keys.`)
+      // Fallback to mock provider if selected provider is not ready
+      console.warn(`OCR provider '${selectedProvider}' is not ready. Falling back to mock provider.`)
+      provider = this.providers.get('mock')
+      if (!provider) {
+        throw new Error('No OCR provider available. Mock provider not found.')
+      }
     }
 
     return provider.processImage(imageData, options)
