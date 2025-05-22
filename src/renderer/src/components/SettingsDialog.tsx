@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import {
   Dialog,
   Button,
@@ -23,147 +23,48 @@ import {
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '../context/ThemeContext'
-import {
-  getSettingsService,
-  SecretsManager,
-  getOcrService,
-  getTranslationService
-} from '../service'
+import { useSettings } from '../hooks'
 
 export function SettingsDialog(): React.ReactElement {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { mode } = useTheme()
-  const settingsService = getSettingsService()
-  const ocrService = getOcrService()
-  const translationService = getTranslationService()
 
-  // State for all settings
-  const [language, setLanguage] = useState(i18n.language)
-  const [autoTranslate, setAutoTranslate] = useState(settingsService.getAutoTranslate())
-  const [appearance, setAppearance] = useState(settingsService.getAppearanceSettings())
+  const {
+    // Language settings
+    language,
+    handleLanguageChange,
 
-  // AI providers
-  const [ocrProvider, setOcrProvider] = useState(settingsService.getOcrProvider())
-  const [translationProvider, setTranslationProvider] = useState(
-    settingsService.getTranslationProvider()
-  )
+    // Auto translate setting
+    autoTranslate,
+    handleAutoTranslateChange,
 
-  // Provider secrets
-  const [ocrSecrets, setOcrSecrets] = useState<Record<string, unknown>>({})
-  const [translationSecrets, setTranslationSecrets] = useState<Record<string, unknown>>({})
+    // Appearance settings
+    appearance,
+    handleAppearanceChange,
 
-  // Available providers
-  const availableOcrProviders = ocrService.getAvailableProviders()
-  const availableTranslationProviders = translationService.getAvailableProviders()
+    // AI provider settings
+    ocrProvider,
+    translationProvider,
+    handleOcrProviderChange,
+    handleTranslationProviderChange,
 
-  // Load settings on component mount
-  useEffect(() => {
-    const settings = settingsService.getSettings()
-    setLanguage(settings.language)
-    setAutoTranslate(settings.autoTranslate)
-    setAppearance(settings.appearance)
-    setOcrProvider(settings.ai.ocrProvider)
-    setTranslationProvider(settings.ai.translationProvider)
+    // Provider secrets
+    ocrSecrets,
+    translationSecrets,
+    handleOcrSecretChange,
+    handleTranslationSecretChange,
 
-    // Load secrets
-    const currentOcrSecrets = SecretsManager.getOcrSecret(settings.ai.ocrProvider)
-    const currentTranslationSecrets = SecretsManager.getTranslationSecret(
-      settings.ai.translationProvider
-    )
+    // Available providers
+    availableOcrProviders,
+    availableTranslationProviders,
 
-    setOcrSecrets(currentOcrSecrets)
-    setTranslationSecrets(currentTranslationSecrets)
-  }, [settingsService])
+    // Configuration fields
+    ocrConfigFields,
+    translationConfigFields,
 
-  const handleLanguageChange = (value: string): void => {
-    setLanguage(value)
-    i18n.changeLanguage(value)
-    settingsService.setLanguage(value)
-  }
-
-  const handleAppearanceChange = (key: keyof typeof appearance, value: boolean): void => {
-    const updatedAppearance = { ...appearance, [key]: value }
-    setAppearance(updatedAppearance)
-    settingsService.updateAppearanceSettings({ [key]: value })
-  }
-
-  const handleAutoTranslateChange = (value: boolean): void => {
-    setAutoTranslate(value)
-    settingsService.setAutoTranslate(value)
-  }
-
-  const handleOcrProviderChange = (value: string): void => {
-    setOcrProvider(value)
-    const providerSecrets = SecretsManager.getOcrSecret(value)
-    setOcrSecrets(providerSecrets)
-  }
-
-  const handleTranslationProviderChange = (value: string): void => {
-    setTranslationProvider(value)
-    const providerSecrets = SecretsManager.getTranslationSecret(value)
-    setTranslationSecrets(providerSecrets)
-  }
-
-  const handleOcrSecretChange = (key: string, value: string): void => {
-    if (key.includes('.')) {
-      // Handle nested keys like 'additionalParams.model'
-      const [parent, child] = key.split('.')
-      setOcrSecrets({
-        ...ocrSecrets,
-        [parent]: {
-          ...ocrSecrets[parent],
-          [child]: value
-        }
-      })
-    } else {
-      setOcrSecrets({
-        ...ocrSecrets,
-        [key]: value
-      })
-    }
-  }
-
-  const handleTranslationSecretChange = (key: string, value: string): void => {
-    if (key.includes('.')) {
-      // Handle nested keys like 'additionalParams.model'
-      const [parent, child] = key.split('.')
-      setTranslationSecrets({
-        ...translationSecrets,
-        [parent]: {
-          ...translationSecrets[parent],
-          [child]: value
-        }
-      })
-    } else {
-      setTranslationSecrets({
-        ...translationSecrets,
-        [key]: value
-      })
-    }
-  }
-
-  const handleApplySettings = (): void => {
-    // Save AI provider selections
-    settingsService.updateAISettings({
-      ocrProvider,
-      translationProvider
-    })
-
-    // Save OCR secrets
-    SecretsManager.setOcrSecret(ocrProvider, ocrSecrets)
-
-    // Save translation secrets
-    SecretsManager.setTranslationSecret(translationProvider, translationSecrets)
-
-    // Save other settings
-    settingsService.setLanguage(language)
-    settingsService.setAutoTranslate(autoTranslate)
-    settingsService.updateAppearanceSettings(appearance)
-  }
-
-  // Get configuration fields for the selected providers
-  const ocrConfigFields = ocrService.getProviderConfigFields(ocrProvider)
-  const translationConfigFields = translationService.getProviderConfigFields(translationProvider)
+    // Apply settings
+    handleApplySettings
+  } = useSettings()
 
   return (
     <Dialog.Root>

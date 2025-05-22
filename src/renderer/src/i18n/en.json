@@ -92,7 +92,14 @@
       "general": "General",
       "appearance": "Appearance",
       "translation": "Translation",
-      "account": "Account"
+      "account": "Account",
+      "ai": "AI"
+    },
+    "ai": {
+      "ocrProvider": "Select OCR Provider",
+      "selectProvider": "Select a provider",
+      "translationProvider": "Select Translation Provider",
+      "providerConfiguration": "Provider Configuration"
     },
     "appearance": {
       "description": "Customize the look and feel of the application",

@@ -82,7 +82,14 @@
       "general": "General",
       "appearance": "Apariencia",
       "translation": "Traducción",
-      "account": "Cuenta"
+      "account": "Cuenta",
+      "ai": "IA"
+    },
+    "ai":{
+      "ocrProvider": "Seleccionar proveedor de OCR",
+      "selectProvider": "Seleccionar proveedor",
+      "translationProvider": "Seleccionar proveedor de traducción",
+      "providerConfiguration": "Configuración del proveedor"
     },
     "appearance": {
       "description": "Personaliza la apariencia de la aplicación",
