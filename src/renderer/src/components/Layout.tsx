@@ -1,12 +1,40 @@
 import { Button, Flex, Box, Heading, Card } from '@radix-ui/themes'
-import { UploadCloud, FileText, BookOpenCheck } from 'lucide-react'
+import { UploadCloud, BookOpenCheck } from 'lucide-react'
 import { SettingsDialog } from './SettingsDialog'
-import { PdfMock } from './PdfMock'
-import { EmptyState } from './EmptyState'
+import { PdfViewer } from './PdfViewer'
+import { TranslationPanel } from './TranslationPanel'
 import { useTranslation } from 'react-i18next'
+import React, { useState, useRef } from 'react'
 
 export function Layout(): React.ReactElement {
   const { t } = useTranslation()
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [extractedText, setExtractedText] = useState<string | null>(null)
+  const [extractedImage, setExtractedImage] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const file = event.target.files?.[0]
+    if (file) {
+      setSelectedFile(file)
+      setExtractedText(null) // Reset extracted content when new file is loaded
+      setExtractedImage(null)
+    }
+  }
+
+  const handleUploadClick = (): void => {
+    fileInputRef.current?.click()
+  }
+
+  const handleTextExtracted = (text: string): void => {
+    setExtractedText(text)
+    setExtractedImage(null) // Clear image if text is found
+  }
+
+  const handleImageExtracted = (base64Image: string): void => {
+    setExtractedImage(base64Image)
+    setExtractedText(null) // Clear text if image is captured
+  }
 
   return (
     <Flex direction="column" style={{ height: '100vh', backgroundColor: 'var(--gray-1)' }}>
@@ -39,43 +67,32 @@ export function Layout(): React.ReactElement {
               <Heading as="h2" size="3">
                 {t('layout.sourceDocumentTitle')}
               </Heading>
-              <Button>
+              <input
+                type="file"
+                accept="application/pdf"
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+                onChange={handleFileChange}
+              />
+              <Button onClick={handleUploadClick}>
                 <UploadCloud size={16} />
-                {t('layout.uploadPdfButton')}
+                {selectedFile ? selectedFile.name : t('layout.uploadPdfButton')}
               </Button>
             </Flex>
           </Card>
 
-          {/* Zona de render mock de PDF */}
+          {/* Zona de render PDF */}
           <Card style={{ flexGrow: 1, overflow: 'hidden' }}>
-            <PdfMock />
+            <PdfViewer
+              file={selectedFile}
+              onTextExtracted={handleTextExtracted}
+              onImageExtracted={handleImageExtracted}
+            />
           </Card>
-
-          {/* Zona "No PDF Loaded" */}
         </Flex>
 
         {/* Columna derecha */}
-        <Card style={{ width: '50%' }}>
-          <Flex direction="column" style={{ height: '100%' }}>
-            <Box
-              p="3"
-              style={{
-                borderBottom: '1px solid var(--gray-5)'
-              }}
-            >
-              <Heading as="h2" size="3">
-                {t('layout.translatedContentTitle')}
-              </Heading>
-            </Box>
-            <Flex flexGrow="1" align="center" justify="center" p="3">
-              <EmptyState
-                icon={<FileText size={48} />}
-                title={t('layout.noContentToTranslateTitle')}
-                description={t('layout.noContentToTranslateDescription')}
-              />
-            </Flex>
-          </Flex>
-        </Card>
+        <TranslationPanel extractedText={extractedText} extractedImage={extractedImage} />
       </Flex>
     </Flex>
   )
