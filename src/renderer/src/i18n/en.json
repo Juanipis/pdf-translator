@@ -1,0 +1,109 @@
+{
+  "app": {
+    "title": "PDF Translator",
+    "description": "Translate PDF documents with ease"
+  },
+  "layout": {
+    "sourceDocumentTitle": "Source Document",
+    "uploadPdfButton": "Upload PDF",
+    "clearFile": "Clear file"
+  },
+  "pdfViewer": {
+    "pageControls": "Page {{pageNum}} of {{numPages}}",
+    "noPdfLoaded": "No PDF document loaded",
+    "loading": "Loading PDF...",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "enterFullscreen": "Enter fullscreen",
+    "exitFullscreen": "Exit fullscreen",
+    "selectionHint": "Select text or image area to translate",
+    "panHint": "Click and drag to navigate around the document",
+    "textSelected": "Text Selected",
+    "imageSelected": "Image Selected",
+    "switchToPanMode": "Switch to navigation mode",
+    "switchToSelectMode": "Switch to selection mode",
+    "selectMode": "Selection Mode",
+    "panMode": "Navigation Mode",
+    "emptyState": {
+      "title": "No PDF Document",
+      "description": "Upload a PDF document to get started"
+    }
+  },
+  "translationPanel": {
+    "title": "Translation Panel",
+    "extractedTextTitle": "Extracted Text",
+    "extractedImageTitle": "Extracted Image",
+    "extractedImageAlt": "Selected portion of PDF document",
+    "extractedImageCaption": "Selected image area from document",
+    "noContentExtracted": "No content has been extracted yet. Select an area in the PDF document.",
+    "translatedContentTitle": "Translated Content",
+    "translationPlaceholder": "Translation will appear here after processing",
+    "translationFeaturePlaceholder": "Translation feature will be available soon",
+    "imageTranslationResult": "Image content translated. This is a placeholder for the actual OCR and translation result.",
+    "selectLanguage": "Select target language",
+    "languages": "Languages",
+    "translate": "Translate",
+    "translating": "Translating...",
+    "retranslate": "Translate Again",
+    "copyToClipboard": "Copy to clipboard",
+    "copied": "Copied!",
+    "shareTranslation": "Share translation",
+    "emptyState": {
+      "noDocument": {
+        "title": "No Document Loaded",
+        "description": "Upload a PDF document first to start translating content"
+      },
+      "noSelection": {
+        "title": "No Content Selected",
+        "description": "Select a text or image area in the document to translate"
+      }
+    }
+  },
+  "pdfMock": {
+    "title": "PDF Preview"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Configure application settings",
+    "openButton": "Open settings",
+    "closeButton": "Close",
+    "cancelButton": "Cancel",
+    "applyButton": "Apply Changes",
+    "language": "Interface Language",
+    "selectLanguage": "Select Language",
+    "colorTheme": "Color Theme",
+    "lightMode": "Light",
+    "darkMode": "Dark",
+    "toggleInHeader": "toggle in header",
+    "tabs": {
+      "general": "General",
+      "appearance": "Appearance",
+      "translation": "Translation",
+      "account": "Account"
+    },
+    "appearance": {
+      "description": "Customize the look and feel of the application",
+      "showPageNumbers": "Show page numbers",
+      "highlightExtractedText": "Highlight extracted text",
+      "showToolbar": "Always show toolbar"
+    },
+    "translation": {
+      "apiKey": "API Key",
+      "enterApiKey": "Enter your API key",
+      "autoTranslate": "Auto-translate selections",
+      "translateImages": "Enable image translation (OCR)",
+      "apiKeyDescription": "An API key is required for translation services. You can get one from the service provider."
+    },
+    "account": {
+      "userProfile": "User Profile",
+      "loginDescription": "Sign in to sync your settings and access premium features",
+      "signIn": "Sign In"
+    }
+  },
+  "theme": {
+    "switchToDark": "Switch to dark mode",
+    "switchToLight": "Switch to light mode"
+  }
+}

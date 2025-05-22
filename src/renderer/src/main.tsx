@@ -5,12 +5,12 @@ import '@radix-ui/themes/styles.css' // Import Radix Themes styles
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App'
-import { Theme } from '@radix-ui/themes' // Import Theme provider
+import { ThemeProvider } from './context/ThemeContext'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Theme accentColor="blue" grayColor="sand" radius="medium" appearance="light">
+    <ThemeProvider>
       <App />
-    </Theme>
+    </ThemeProvider>
   </StrictMode>
 )
