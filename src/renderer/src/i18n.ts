@@ -8,7 +8,24 @@ const resources = {
       powered: 'Powered by electron-vite',
       tip: 'Please try pressing <1>F12</1> to open the devTool',
       documentation: 'Documentation',
-      sendIpc: 'Send IPC'
+      sendIpc: 'Send IPC',
+      app: {
+        title: "Juanipi's PDF Translator"
+      },
+      settings: {
+        title: 'Settings',
+        description: 'Application settings (mock).',
+        closeButton: 'Close'
+      },
+      layout: {
+        sourceDocumentTitle: 'Source Document',
+        uploadPdfButton: 'Upload PDF',
+        noPdfLoadedTitle: 'No PDF Loaded',
+        noPdfLoadedDescription: 'Click "Upload PDF" to select a document...',
+        translatedContentTitle: 'Translated Content',
+        noContentToTranslateTitle: 'No content to translate',
+        noContentToTranslateDescription: 'Upload a PDF to see its translation here.'
+      }
     }
   },
   es: {
@@ -17,7 +34,24 @@ const resources = {
       powered: 'Desarrollado por electron-vite',
       tip: 'Presiona <1>F12</1> para abrir las herramientas de desarrollo',
       documentation: 'Documentación',
-      sendIpc: 'Enviar IPC'
+      sendIpc: 'Enviar IPC',
+      app: {
+        title: 'Traductor de PDF de Juanipi'
+      },
+      settings: {
+        title: 'Configuración',
+        description: 'Configuraciones de la app (mock).',
+        closeButton: 'Cerrar'
+      },
+      layout: {
+        sourceDocumentTitle: 'Documento Fuente',
+        uploadPdfButton: 'Subir PDF',
+        noPdfLoadedTitle: 'Ningún PDF Cargado',
+        noPdfLoadedDescription: 'Haz clic en "Subir PDF" para seleccionar un documento...',
+        translatedContentTitle: 'Contenido Traducido',
+        noContentToTranslateTitle: 'Sin contenido para traducir',
+        noContentToTranslateDescription: 'Sube un PDF para ver su traducción aquí.'
+      }
     }
   }
 }
