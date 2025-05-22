@@ -29,7 +29,7 @@ export function PdfViewer({
   onImageExtracted
 }: PdfViewerProps): React.ReactElement {
   const { t } = useTranslation()
-  
+
   const {
     // Refs
     canvasRef,
@@ -55,6 +55,12 @@ export function PdfViewer({
     toggleViewMode,
     toggleFullscreen
   } = usePdfViewer({ file, onTextExtracted, onImageExtracted })
+
+  // compute the canvas’s offset within its positioned parent
+  const canvasOffset = {
+    x: canvasRef.current?.offsetLeft || 0,
+    y: canvasRef.current?.offsetTop || 0
+  }
 
   return (
     <Flex direction="column" style={{ height: '100%', width: '100%' }} gap="2" ref={containerRef}>
@@ -132,7 +138,9 @@ export function PdfViewer({
 
             <Tooltip
               content={
-                viewState.isFullscreen ? t('pdfViewer.exitFullscreen') : t('pdfViewer.enterFullscreen')
+                viewState.isFullscreen
+                  ? t('pdfViewer.exitFullscreen')
+                  : t('pdfViewer.enterFullscreen')
               }
             >
               <IconButton onClick={toggleFullscreen} disabled={!pdfDoc} variant="soft" size="1">
@@ -303,8 +311,8 @@ export function PdfViewer({
                       ? 'jade'
                       : 'accent'
                 }-a3)`,
-                left: selectionState.selectionRect.x,
-                top: selectionState.selectionRect.y,
+                left: selectionState.selectionRect.x + canvasOffset.x,
+                top: selectionState.selectionRect.y + canvasOffset.y,
                 width: selectionState.selectionRect.width,
                 height: selectionState.selectionRect.height,
                 pointerEvents: 'none',
