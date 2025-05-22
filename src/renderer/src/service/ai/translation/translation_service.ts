@@ -3,6 +3,7 @@ import { TranslationModel, TranslationResult } from './translation_model'
 import { MockTranslationProvider } from './mock_translation_provider'
 import { GoogleTranslationProvider } from './google_translation_provider'
 import { OllamaTranslationProvider } from './ollama_translation_provider'
+import { GeminiTranslationProvider } from './gemini_translation_provider'
 
 export class TranslationService {
   private static instance: TranslationService
@@ -13,6 +14,7 @@ export class TranslationService {
     this.registerProvider(new MockTranslationProvider())
     this.registerProvider(new GoogleTranslationProvider())
     this.registerProvider(new OllamaTranslationProvider())
+    this.registerProvider(new GeminiTranslationProvider())
   }
 
   public static getInstance(): TranslationService {
@@ -76,15 +78,15 @@ export class TranslationService {
     switch (providerName) {
       case 'google':
         return [{ key: 'apiKey', type: 'password', required: true, label: 'API Key' }]
-      case 'openai':
-        return [
-          { key: 'apiKey', type: 'password', required: true, label: 'API Key' },
-          { key: 'additionalParams.model', type: 'text', required: false, label: 'Model Name' }
-        ]
       case 'ollama':
         return [
           { key: 'connectionUrl', type: 'text', required: true, label: 'Endpoint URL' },
           { key: 'additionalParams.model', type: 'text', required: false, label: 'Model Name' }
+        ]
+      case 'gemini':
+        return [
+          { key: 'apiKey', type: 'password', required: true, label: 'API Key' },
+          { key: 'model', type: 'text', required: true, label: 'Model' }
         ]
       case 'mock':
         return []
