@@ -1,0 +1,109 @@
+{
+  "app": {
+    "title": "Traductor de PDF",
+    "description": "Traduce documentos PDF con facilidad"
+  },
+  "layout": {
+    "sourceDocumentTitle": "Documento Fuente",
+    "uploadPdfButton": "Subir PDF",
+    "clearFile": "Limpiar archivo"
+  },
+  "pdfViewer": {
+    "pageControls": "Página {{pageNum}} de {{numPages}}",
+    "noPdfLoaded": "No hay documento PDF cargado",
+    "loading": "Cargando PDF...",
+    "previousPage": "Página anterior",
+    "nextPage": "Página siguiente",
+    "zoomIn": "Acercar",
+    "zoomOut": "Alejar",
+    "enterFullscreen": "Pantalla completa",
+    "exitFullscreen": "Salir de pantalla completa",
+    "selectionHint": "Selecciona texto o área de imagen para traducir",
+    "panHint": "Haz clic y arrastra para navegar por el documento",
+    "textSelected": "Texto Seleccionado",
+    "imageSelected": "Imagen Seleccionada",
+    "switchToPanMode": "Cambiar a modo de navegación",
+    "switchToSelectMode": "Cambiar a modo de selección",
+    "selectMode": "Modo de Selección",
+    "panMode": "Modo de Navegación",
+    "emptyState": {
+      "title": "Sin Documento PDF",
+      "description": "Sube un documento PDF para comenzar"
+    }
+  },
+  "translationPanel": {
+    "title": "Panel de Traducción",
+    "extractedTextTitle": "Texto Extraído",
+    "extractedImageTitle": "Imagen Extraída",
+    "extractedImageAlt": "Porción seleccionada del documento PDF",
+    "extractedImageCaption": "Área de imagen seleccionada del documento",
+    "noContentExtracted": "Aún no se ha extraído contenido. Selecciona un área en el documento PDF.",
+    "translatedContentTitle": "Contenido Traducido",
+    "translationPlaceholder": "La traducción aparecerá aquí después del procesamiento",
+    "translationFeaturePlaceholder": "La función de traducción estará disponible pronto",
+    "imageTranslationResult": "Contenido de imagen traducido. Este es un marcador de posición para el resultado real de OCR y traducción.",
+    "selectLanguage": "Seleccionar idioma destino",
+    "languages": "Idiomas",
+    "translate": "Traducir",
+    "translating": "Traduciendo...",
+    "retranslate": "Traducir de nuevo",
+    "copyToClipboard": "Copiar al portapapeles",
+    "copied": "¡Copiado!",
+    "shareTranslation": "Compartir traducción",
+    "emptyState": {
+      "noDocument": {
+        "title": "Sin Documento Cargado",
+        "description": "Sube un documento PDF primero para comenzar a traducir contenido"
+      },
+      "noSelection": {
+        "title": "Sin Contenido Seleccionado",
+        "description": "Selecciona un área de texto o imagen en el documento para traducir"
+      }
+    }
+  },
+  "pdfMock": {
+    "title": "Vista previa PDF"
+  },
+  "settings": {
+    "title": "Configuración",
+    "description": "Configurar ajustes de la aplicación",
+    "openButton": "Abrir configuración",
+    "closeButton": "Cerrar",
+    "cancelButton": "Cancelar",
+    "applyButton": "Aplicar Cambios",
+    "language": "Idioma de la interfaz",
+    "selectLanguage": "Seleccionar Idioma",
+    "colorTheme": "Tema de Color",
+    "lightMode": "Claro",
+    "darkMode": "Oscuro",
+    "toggleInHeader": "cambiar en el encabezado",
+    "tabs": {
+      "general": "General",
+      "appearance": "Apariencia",
+      "translation": "Traducción",
+      "account": "Cuenta"
+    },
+    "appearance": {
+      "description": "Personaliza la apariencia de la aplicación",
+      "showPageNumbers": "Mostrar números de página",
+      "highlightExtractedText": "Resaltar texto extraído",
+      "showToolbar": "Mostrar siempre la barra de herramientas"
+    },
+    "translation": {
+      "apiKey": "Clave API",
+      "enterApiKey": "Ingresa tu clave API",
+      "autoTranslate": "Auto-traducir selecciones",
+      "translateImages": "Habilitar traducción de imágenes (OCR)",
+      "apiKeyDescription": "Se requiere una clave API para los servicios de traducción. Puedes obtener una del proveedor del servicio."
+    },
+    "account": {
+      "userProfile": "Perfil de Usuario",
+      "loginDescription": "Inicia sesión para sincronizar tus ajustes y acceder a funciones premium",
+      "signIn": "Iniciar Sesión"
+    }
+  },
+  "theme": {
+    "switchToDark": "Cambiar a modo oscuro",
+    "switchToLight": "Cambiar a modo claro"
+  }
+}

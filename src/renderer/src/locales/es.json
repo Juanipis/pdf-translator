@@ -1,0 +1,78 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "save": "Guardar",
+    "cancel": "Cancelar"
+  },
+  "header": {
+    "title": "Traductor PDF",
+    "newDocument": "Nuevo Documento",
+    "settings": "Ajustes"
+  },
+  "documentViewer": {
+    "openDocument": "Abrir Documento",
+    "dropDocumentHere": "Suelta tu documento PDF aquí",
+    "or": "o",
+    "browseFiles": "Explorar archivos",
+    "pageControls": "Control de Páginas",
+    "nextPage": "Página Siguiente",
+    "previousPage": "Página Anterior",
+    "currentPage": "Página {{current}} de {{total}}",
+    "zoomIn": "Acercar",
+    "zoomOut": "Alejar",
+    "resetZoom": "Restablecer Zoom",
+    "toolSelect": "Seleccionar Texto",
+    "toolPan": "Desplazar Documento"
+  },
+  "translationPanel": {
+    "title": "Traducción",
+    "selectLanguage": "Seleccionar idioma",
+    "languages": "Idiomas",
+    "extractedTextTitle": "Texto Extraído",
+    "extractedImageTitle": "Imagen Extraída",
+    "extractedImageAlt": "Imagen extraída del PDF",
+    "extractedImageCaption": "Imagen extraída del documento PDF",
+    "translatedContentTitle": "Traducción",
+    "shareTranslation": "Compartir Traducción",
+    "copyToClipboard": "Copiar al Portapapeles",
+    "copied": "¡Copiado!",
+    "translationPlaceholder": "La traducción aparecerá aquí después de hacer clic en el botón de traducir",
+    "translating": "Traduciendo...",
+    "retranslate": "Traducir de Nuevo",
+    "translate": "Traducir",
+    "emptyState": {
+      "noDocument": {
+        "title": "Ningún Documento Cargado",
+        "description": "Abre un documento PDF para empezar a traducir contenido"
+      },
+      "noSelection": {
+        "title": "Nada para Traducir",
+        "description": "Selecciona texto o un área del documento para traducir"
+      }
+    },
+    "imageTranslationResult": "La traducción de la imagen se mostraría aquí en una implementación real"
+  },
+  "settings": {
+    "title": "Ajustes",
+    "theme": {
+      "label": "Tema",
+      "light": "Claro",
+      "dark": "Oscuro",
+      "system": "Sistema"
+    },
+    "language": {
+      "label": "Idioma",
+      "english": "Inglés",
+      "spanish": "Español"
+    },
+    "ocrLanguage": {
+      "label": "Idioma OCR"
+    },
+    "apiSettings": {
+      "title": "Ajustes de API",
+      "translationProvider": "Proveedor de Traducción",
+      "apiKey": "Clave API"
+    }
+  }
+}

@@ -140,7 +140,7 @@ export function PdfViewer({
     }
   }, [])
 
-  const toggleFullscreen = () => {
+  const toggleFullscreen = (): void => {
     if (!containerRef.current) return
 
     if (!document.fullscreenElement) {
@@ -154,7 +154,7 @@ export function PdfViewer({
     }
   }
 
-  const toggleViewMode = () => {
+  const toggleViewMode = (): void => {
     setViewMode((prevMode) => (prevMode === 'select' ? 'pan' : 'select'))
   }
 
@@ -337,7 +337,12 @@ export function PdfViewer({
   }
 
   // Función auxiliar para capturar la selección como imagen
-  const captureImageSelection = (rect: { x: number; y: number; width: number; height: number }) => {
+  const captureImageSelection = (rect: {
+    x: number
+    y: number
+    width: number
+    height: number
+  }): void => {
     try {
       setSelectionType('image')
       const tempCanvas = document.createElement('canvas')

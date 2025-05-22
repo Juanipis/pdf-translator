@@ -34,7 +34,7 @@ export function TranslationPanel({
 
   const hasContent = extractedText || extractedImage
 
-  const handleCopy = () => {
+  const handleCopy = (): void => {
     if (translatedContent) {
       navigator.clipboard.writeText(translatedContent)
       setCopied(true)
@@ -42,7 +42,7 @@ export function TranslationPanel({
     }
   }
 
-  const handleTranslate = () => {
+  const handleTranslate = (): void => {
     // Simulate translation process
     setIsTranslating(true)
     setTimeout(() => {

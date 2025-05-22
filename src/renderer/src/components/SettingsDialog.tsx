@@ -30,13 +30,13 @@ export function SettingsDialog(): React.ReactElement {
   const [apiKey, setApiKey] = useState('')
   const [autoTranslate, setAutoTranslate] = useState(false)
 
-  const handleLanguageChange = (value: string) => {
+  const handleLanguageChange = (value: string): void => {
     setLanguage(value)
     i18n.changeLanguage(value)
     localStorage.setItem('language', value)
   }
 
-  const handleApplySettings = () => {
+  const handleApplySettings = (): void => {
     // Save settings
     localStorage.setItem('apiKey', apiKey)
     localStorage.setItem('autoTranslate', String(autoTranslate))

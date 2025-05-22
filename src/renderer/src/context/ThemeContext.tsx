@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { Theme } from '@radix-ui/themes'
+
 
 type ThemeMode = 'light' | 'dark'
 
@@ -18,7 +19,7 @@ export const useTheme = (): ThemeContextType => {
   return context
 }
 
-export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export function ThemeProvider({ children }: { children: ReactNode }): JSX.Element {
   // Check for system preference or stored preference
   const getInitialTheme = (): ThemeMode => {
     const savedTheme = localStorage.getItem('theme') as ThemeMode
