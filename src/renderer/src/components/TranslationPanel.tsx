@@ -16,6 +16,36 @@ import { Copy, Check, RefreshCw, Languages, Share2, AlertCircle } from 'lucide-r
 import { EmptyState } from './EmptyState'
 import { getOcrService, getTranslationService, getSettingsService } from '../service'
 
+// Move the helper functions outside of the component
+const cleanHtmlContent = (content: string): string => {
+  // Remove markdown code block markers if present
+  return content
+    .replace(/^```html\s*/i, '')
+    .replace(/^```\s*/i, '')
+    .replace(/\s*```$/i, '')
+}
+
+const isHtmlContent = (text: string): boolean => {
+  // Strip markdown code block markers if present
+  const cleanText = cleanHtmlContent(text)
+  return /<\/?[a-z][\s\S]*>/i.test(cleanText)
+}
+
+// Add a new component for safely rendering HTML content
+const HtmlContent = ({ content }: { content: string }): React.ReactElement => {
+  return (
+    <div
+      dangerouslySetInnerHTML={{ __html: cleanHtmlContent(content) }}
+      style={{
+        fontSize: '14px',
+        lineHeight: '1.5',
+        color: 'var(--gray-12)'
+      }}
+      className="html-content"
+    />
+  )
+}
+
 interface TranslationPanelProps {
   extractedText: string | null
   extractedImage: string | null // Base64 image string
@@ -202,20 +232,27 @@ export function TranslationPanel({
                   <Heading as="h3" size="2" mb="2" color="blue">
                     {t('translationPanel.extractedTextTitle')}
                   </Heading>
-                  <Card variant="surface" style={{ backgroundColor: 'var(--blue-a2)', border: '1px solid var(--blue-6)' }}>
+                  <Card
+                    variant="surface"
+                    style={{ backgroundColor: 'var(--blue-a2)', border: '1px solid var(--blue-6)' }}
+                  >
                     <Box p="3">
-                      <Text
-                        as="div"
-                        style={{
-                          whiteSpace: 'pre-wrap',
-                          wordBreak: 'break-word',
-                          fontSize: '14px',
-                          lineHeight: '1.5',
-                          color: 'var(--gray-12)'
-                        }}
-                      >
-                        {extractedText}
-                      </Text>
+                      {isHtmlContent(extractedText) ? (
+                        <HtmlContent content={extractedText} />
+                      ) : (
+                        <Text
+                          as="div"
+                          style={{
+                            whiteSpace: 'pre-wrap',
+                            wordBreak: 'break-word',
+                            fontSize: '14px',
+                            lineHeight: '1.5',
+                            color: 'var(--gray-12)'
+                          }}
+                        >
+                          {extractedText}
+                        </Text>
+                      )}
                     </Box>
                   </Card>
                 </Box>
@@ -240,7 +277,10 @@ export function TranslationPanel({
                       </Button>
                     )}
                   </Flex>
-                  <Card variant="surface" style={{ backgroundColor: 'var(--jade-a2)', border: '1px solid var(--jade-6)' }}>
+                  <Card
+                    variant="surface"
+                    style={{ backgroundColor: 'var(--jade-a2)', border: '1px solid var(--jade-6)' }}
+                  >
                     <Box p="3">
                       <img
                         src={extractedImage}
@@ -293,10 +333,13 @@ export function TranslationPanel({
                     )}
                   </Flex>
 
-                  <Card variant="surface" style={{ 
-                    backgroundColor: translatedContent ? 'var(--purple-a2)' : 'var(--gray-a2)', 
-                    border: `1px solid var(--${translatedContent ? 'purple' : 'gray'}-6)` 
-                  }}>
+                  <Card
+                    variant="surface"
+                    style={{
+                      backgroundColor: translatedContent ? 'var(--purple-a2)' : 'var(--gray-a2)',
+                      border: `1px solid var(--${translatedContent ? 'purple' : 'gray'}-6)`
+                    }}
+                  >
                     {isTranslating ? (
                       <Flex align="center" justify="center" p="4">
                         <RefreshCw size={20} className="animate-spin" />
@@ -304,18 +347,22 @@ export function TranslationPanel({
                       </Flex>
                     ) : translatedContent ? (
                       <Box p="3">
-                        <Text
-                          as="div"
-                          style={{
-                            whiteSpace: 'pre-wrap',
-                            wordBreak: 'break-word',
-                            fontSize: '14px',
-                            lineHeight: '1.5',
-                            color: 'var(--gray-12)'
-                          }}
-                        >
-                          {translatedContent}
-                        </Text>
+                        {isHtmlContent(translatedContent) ? (
+                          <HtmlContent content={translatedContent} />
+                        ) : (
+                          <Text
+                            as="div"
+                            style={{
+                              whiteSpace: 'pre-wrap',
+                              wordBreak: 'break-word',
+                              fontSize: '14px',
+                              lineHeight: '1.5',
+                              color: 'var(--gray-12)'
+                            }}
+                          >
+                            {translatedContent}
+                          </Text>
+                        )}
                       </Box>
                     ) : (
                       <Flex align="center" justify="center" p="4">
@@ -354,3 +401,25 @@ export function TranslationPanel({
     </Card>
   )
 }
+
+// Add a global style for HTML content, especially tables
+const style = document.createElement('style')
+style.innerHTML = `
+  .html-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  .html-content th, .html-content td {
+    border: 1px solid var(--gray-6);
+    padding: 8px;
+    text-align: left;
+  }
+  .html-content th {
+    background-color: var(--gray-3);
+  }
+  .html-content tr:nth-child(even) {
+    background-color: var(--gray-2);
+  }
+`
+document.head.appendChild(style)
