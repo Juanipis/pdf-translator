@@ -1,6 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { Theme } from '@radix-ui/themes'
-
 
 type ThemeMode = 'light' | 'dark'
 
@@ -19,7 +18,7 @@ export const useTheme = (): ThemeContextType => {
   return context
 }
 
-export function ThemeProvider({ children }: { children: ReactNode }): JSX.Element {
+export function ThemeProvider({ children }: { children: ReactNode }): React.ReactElement {
   // Check for system preference or stored preference
   const getInitialTheme = (): ThemeMode => {
     const savedTheme = localStorage.getItem('theme') as ThemeMode
@@ -37,7 +36,7 @@ export function ThemeProvider({ children }: { children: ReactNode }): JSX.Elemen
 
   const [mode, setMode] = useState<ThemeMode>(getInitialTheme)
 
-  const toggleTheme = () => {
+  const toggleTheme = (): void => {
     setMode((prevMode) => {
       const newMode = prevMode === 'light' ? 'dark' : 'light'
       localStorage.setItem('theme', newMode)
@@ -46,9 +45,9 @@ export function ThemeProvider({ children }: { children: ReactNode }): JSX.Elemen
   }
 
   // Update theme when system preference changes
-  useEffect(() => {
+  useEffect((): (() => void) => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const handleChange = (e: MediaQueryListEvent) => {
+    const handleChange = (e: MediaQueryListEvent): void => {
       if (!localStorage.getItem('theme')) {
         setMode(e.matches ? 'dark' : 'light')
       }

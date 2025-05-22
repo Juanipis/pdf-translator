@@ -213,7 +213,7 @@ export function PdfViewer({
     }
   }
 
-  const handleMouseUp = async (event: React.MouseEvent<HTMLCanvasElement>): Promise<void> => {
+  const handleMouseUp = async (): Promise<void> => {
     if (viewMode === 'select' && isSelecting && selectionRect && pdfDoc && canvasRef.current) {
       setIsSelecting(false)
       setStartPoint(null)
@@ -331,7 +331,7 @@ export function PdfViewer({
       setPanStart(null)
 
       if (canvasRef.current) {
-        canvasRef.current.style.cursor = viewMode === 'select' ? 'crosshair' : 'grab'
+        canvasRef.current.style.cursor = (viewMode as string) === 'select' ? 'crosshair' : 'grab'
       }
     }
   }

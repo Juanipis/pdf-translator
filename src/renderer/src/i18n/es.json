@@ -94,7 +94,12 @@
       "enterApiKey": "Ingresa tu clave API",
       "autoTranslate": "Auto-traducir selecciones",
       "translateImages": "Habilitar traducción de imágenes (OCR)",
-      "apiKeyDescription": "Se requiere una clave API para los servicios de traducción. Puedes obtener una del proveedor del servicio."
+      "apiKeyDescription": "Se requiere una clave API para los servicios de traducción. Puedes obtener una del proveedor del servicio.",
+      "providers": "Proveedores de servicios",
+      "selectOcrProvider": "Seleccionar proveedor de OCR",
+      "selectTranslationProvider": "Seleccionar proveedor de traducción",
+      "connectionSettings": "Configuración de conexión",
+      "connectionUrl": "URL de conexión (opcional)"
     },
     "account": {
       "userProfile": "Perfil de Usuario",
@@ -105,5 +110,22 @@
   "theme": {
     "switchToDark": "Cambiar a modo oscuro",
     "switchToLight": "Cambiar a modo claro"
+  },
+  "aiService": {
+    "ocr": {
+      "processing": "Procesando imagen...",
+      "error": "Error al procesar la imagen",
+      "noProvider": "No hay proveedor de OCR configurado",
+      "apiKeyRequired": "Se requiere una clave API para este servicio"
+    },
+    "translation": {
+      "processing": "Traduciendo texto...",
+      "error": "Error al traducir el texto",
+      "noProvider": "No hay proveedor de traducción configurado",
+      "apiKeyRequired": "Se requiere una clave API para este servicio"
+    },
+    "providers": {
+      "mock": "Simulado (Demo)"
+    }
   }
 }
