@@ -73,7 +73,10 @@ export function useSettings(): UseSettingsReturn {
   const ocrConfigFields = ocrService.getProviderConfigFields(ocrProvider)
   const translationConfigFields = translationService.getProviderConfigFields(translationProvider)
 
-  // Load settings on component mount
+  // Use a ref to track if settings need to be reloaded
+  const [needsReload, setNeedsReload] = useState(false)
+
+  // Load settings on component mount or when needsReload is true
   useEffect(() => {
     const settings = settingsService.getSettings()
     setLanguage(settings.language)
@@ -90,7 +93,11 @@ export function useSettings(): UseSettingsReturn {
 
     setOcrSecrets(currentOcrSecrets)
     setTranslationSecrets(currentTranslationSecrets)
-  }, [settingsService])
+
+    if (needsReload) {
+      setNeedsReload(false)
+    }
+  }, [settingsService, needsReload])
 
   const handleLanguageChange = useCallback(
     (value: string): void => {
@@ -175,6 +182,10 @@ export function useSettings(): UseSettingsReturn {
       translationProvider
     })
 
+    // Also update in SecretsManager static methods for immediate effect
+    SecretsManager.setSelectedOcrProvider(ocrProvider)
+    SecretsManager.setSelectedTranslationProvider(translationProvider)
+
     // Save OCR secrets
     SecretsManager.setOcrSecret(ocrProvider, ocrSecrets)
 
@@ -185,6 +196,13 @@ export function useSettings(): UseSettingsReturn {
     settingsService.setLanguage(language)
     settingsService.setAutoTranslate(autoTranslate)
     settingsService.updateAppearanceSettings(appearance)
+
+    // Set flag to reload settings for immediate effect
+    setNeedsReload(true)
+
+    // This forces any component using the OCR service to refresh its provider
+    ocrService.setCurrentProvider(ocrProvider)
+    translationService.setCurrentProvider(translationProvider)
   }, [
     settingsService,
     ocrProvider,
@@ -193,7 +211,9 @@ export function useSettings(): UseSettingsReturn {
     translationSecrets,
     language,
     autoTranslate,
-    appearance
+    appearance,
+    ocrService,
+    translationService
   ])
 
   return {

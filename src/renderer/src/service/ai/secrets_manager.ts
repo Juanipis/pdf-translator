@@ -1,6 +1,7 @@
 export interface AIServiceSecrets {
   apiKey?: string
   connectionUrl?: string
+  model?: string
   additionalParams?: Record<string, string>
 }
 
@@ -16,6 +17,7 @@ export interface AISecrets {
 const DEFAULT_SECRETS: AISecrets = {
   ocr: {
     google: {},
+    gemini: {},
     azure: {},
     ollama: { connectionUrl: 'http://localhost:11434' },
     amazon: {},
@@ -29,6 +31,9 @@ const DEFAULT_SECRETS: AISecrets = {
     mock: {}
   }
 }
+
+const OCR_PROVIDER_STORAGE_KEY = 'selected_ocr_provider'
+const TRANSLATION_PROVIDER_STORAGE_KEY = 'selected_translation_provider'
 
 export class SecretsManager {
   private static readonly STORAGE_KEY = 'ai_service_secrets'
@@ -79,7 +84,13 @@ export class SecretsManager {
   }
 
   static getSelectedOcrProvider(): string {
-    // Check if the electron API and method exists
+    // First check localStorage for the most recent selection
+    const storedProvider = localStorage.getItem(OCR_PROVIDER_STORAGE_KEY)
+    if (storedProvider) {
+      return storedProvider
+    }
+
+    // Then check if the electron API and method exists
     if (window.electron && 'getSettingsService' in window.electron) {
       const settingsService = (window.electron as unknown as Record<string, unknown>)
         .getSettingsService as () => { getOcrProvider: () => string }
@@ -91,6 +102,12 @@ export class SecretsManager {
   }
 
   static getSelectedTranslationProvider(): string {
+    // First check localStorage for the most recent selection
+    const storedProvider = localStorage.getItem(TRANSLATION_PROVIDER_STORAGE_KEY)
+    if (storedProvider) {
+      return storedProvider
+    }
+
     // Check if the electron API and method exists
     if (window.electron && 'getSettingsService' in window.electron) {
       const settingsService = (window.electron as unknown as Record<string, unknown>)
@@ -103,6 +120,9 @@ export class SecretsManager {
   }
 
   static setSelectedOcrProvider(provider: string): void {
+    // Store in localStorage for immediate effect
+    localStorage.setItem(OCR_PROVIDER_STORAGE_KEY, provider)
+
     // Check if the electron API and method exists
     if (window.electron && 'getSettingsService' in window.electron) {
       const settingsService = (
@@ -113,6 +133,9 @@ export class SecretsManager {
   }
 
   static setSelectedTranslationProvider(provider: string): void {
+    // Store in localStorage for immediate effect
+    localStorage.setItem(TRANSLATION_PROVIDER_STORAGE_KEY, provider)
+
     // Check if the electron API and method exists
     if (window.electron && 'getSettingsService' in window.electron) {
       const settingsService = (
