@@ -309,16 +309,42 @@ export function SettingsDialog(): React.ReactElement {
                                   {field.required && <Text color="red"> *</Text>}
                                 </Text>
                                 <Box style={{ width: '60%' }}>
-                                  <StyledInput
-                                    id={`ocr-${field.key}`}
-                                    type={field.type}
-                                    value={value}
-                                    onChange={(e) =>
-                                      handleOcrSecretChange(field.key, e.target.value)
-                                    }
-                                    required={field.required}
-                                    placeholder={`${field.label}...`}
-                                  />
+                                  <Flex align="center" gap="2" style={{ width: '100%' }}>
+                                    <StyledInput
+                                      id={`ocr-${field.key}`}
+                                      type={field.type}
+                                      value={value}
+                                      onChange={(e) =>
+                                        handleOcrSecretChange(field.key, e.target.value)
+                                      }
+                                      required={field.required}
+                                      placeholder={`${field.label}...`}
+                                      style={{ flexGrow: 1 }}
+                                    />
+                                    {ocrProvider === 'local_transformers_ocr' && field.key === 'modelsPath' && (
+                                      <Button
+                                        type="button"
+                                        size="1"
+                                        variant="outline"
+                                        onClick={async () => {
+                                          if (window.electron && window.electron.selectDirectory) {
+                                            try {
+                                              const path = await window.electron.selectDirectory();
+                                              if (path) {
+                                                handleOcrSecretChange(field.key, path);
+                                              }
+                                            } catch (err) {
+                                              console.error("Error selecting directory for OCR:", err);
+                                            }
+                                          } else {
+                                            console.warn("selectDirectory function not available on window.electron");
+                                          }
+                                        }}
+                                      >
+                                        {t('settings.browseButton')}
+                                      </Button>
+                                    )}
+                                  </Flex>
                                 </Box>
                               </Flex>
                             )
@@ -399,16 +425,42 @@ export function SettingsDialog(): React.ReactElement {
                                   {field.required && <Text color="red"> *</Text>}
                                 </Text>
                                 <Box style={{ width: '60%' }}>
-                                  <StyledInput
-                                    id={`translation-${field.key}`}
-                                    type={field.type}
-                                    value={value}
-                                    onChange={(e) =>
-                                      handleTranslationSecretChange(field.key, e.target.value)
-                                    }
-                                    required={field.required}
-                                    placeholder={`${field.label}...`}
-                                  />
+                                  <Flex align="center" gap="2" style={{ width: '100%' }}>
+                                    <StyledInput
+                                      id={`translation-${field.key}`}
+                                      type={field.type}
+                                      value={value}
+                                      onChange={(e) =>
+                                        handleTranslationSecretChange(field.key, e.target.value)
+                                      }
+                                      required={field.required}
+                                      placeholder={`${field.label}...`}
+                                      style={{ flexGrow: 1 }}
+                                    />
+                                    {translationProvider === 'local_transformers_translation' && field.key === 'modelsPath' && (
+                                      <Button
+                                        type="button"
+                                        size="1"
+                                        variant="outline"
+                                        onClick={async () => {
+                                          if (window.electron && window.electron.selectDirectory) {
+                                            try {
+                                              const path = await window.electron.selectDirectory();
+                                              if (path) {
+                                                handleTranslationSecretChange(field.key, path);
+                                              }
+                                            } catch (err) {
+                                              console.error("Error selecting directory for Translation:", err);
+                                            }
+                                          } else {
+                                            console.warn("selectDirectory function not available on window.electron");
+                                          }
+                                        }}
+                                      >
+                                        {t('settings.browseButton')}
+                                      </Button>
+                                    )}
+                                  </Flex>
                                 </Box>
                               </Flex>
                             )

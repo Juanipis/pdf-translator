@@ -4,6 +4,7 @@ import { MockOcrProvider } from './mock_ocr_provider'
 import { GoogleOcrProvider } from './google_ocr_provider'
 import { OllamaOcrProvider } from './ollama_ocr_provider'
 import { GeminiOcrProvider } from './gemini_ocr_provider'
+import { LocalOcrProvider } from './local_ocr_provider';
 
 export class OcrService {
   private static instance: OcrService
@@ -15,6 +16,7 @@ export class OcrService {
     this.registerProvider(new GoogleOcrProvider())
     this.registerProvider(new GeminiOcrProvider())
     this.registerProvider(new OllamaOcrProvider())
+    this.registerProvider(new LocalOcrProvider());
   }
 
   public static getInstance(): OcrService {
@@ -102,6 +104,11 @@ export class OcrService {
           { key: 'apiKey', type: 'password', required: true, label: 'API Key' },
           { key: 'model', type: 'text', required: true, label: 'Model' }
         ]
+      case 'local_transformers_ocr':
+        return [
+          { key: 'modelsPath', type: 'text', required: true, label: 'Models Directory Path' }
+          // Add other relevant fields for this provider if any in the future
+        ];
       default:
         return [{ key: 'apiKey', type: 'password', required: true, label: 'API Key' }]
     }

@@ -4,6 +4,7 @@ import { MockTranslationProvider } from './mock_translation_provider'
 import { GoogleTranslationProvider } from './google_translation_provider'
 import { OllamaTranslationProvider } from './ollama_translation_provider'
 import { GeminiTranslationProvider } from './gemini_translation_provider'
+import { LocalTranslationProvider } from './local_translation_provider';
 
 export class TranslationService {
   private static instance: TranslationService
@@ -15,6 +16,7 @@ export class TranslationService {
     this.registerProvider(new GoogleTranslationProvider())
     this.registerProvider(new OllamaTranslationProvider())
     this.registerProvider(new GeminiTranslationProvider())
+    this.registerProvider(new LocalTranslationProvider());
   }
 
   public static getInstance(): TranslationService {
@@ -90,6 +92,11 @@ export class TranslationService {
           { key: 'apiKey', type: 'password', required: true, label: 'API Key' },
           { key: 'model', type: 'text', required: true, label: 'Model' }
         ]
+      case 'local_transformers_translation':
+        return [
+          { key: 'modelsPath', type: 'text', required: true, label: 'Models Directory Path' }
+          // Add other relevant fields for this provider if any in the future
+        ];
       case 'mock':
         return []
       default:

@@ -1,7 +1,10 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron' // Added dialog
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import fetch from 'node-fetch';
+import * as fs from 'fs';
+import * as path from 'path';
 
 function createWindow(): void {
   // Create the browser window.
@@ -51,6 +54,78 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
+
+  // IPC handler for selecting a directory
+  ipcMain.handle('select-directory', async () => {
+    const { canceled, filePaths } = await dialog.showOpenDialog({
+      properties: ['openDirectory']
+    });
+    if (canceled || filePaths.length === 0) {
+      return null;
+    }
+    return filePaths[0];
+  });
+
+  // IPC handler for downloading Hugging Face models
+  ipcMain.handle('download-hf-model', async (event, { modelName, downloadPathBase }) => {
+    const modelFilesApiUrl = `https://huggingface.co/api/models/${modelName}/tree/main`;
+    const modelDownloadBaseUrl = `https://huggingface.co/${modelName}/resolve/main/`;
+    const modelSpecificPath = path.join(downloadPathBase, modelName.replace('/', '_')); // Use replace to avoid issues with slashes in paths
+
+    try {
+      if (!fs.existsSync(modelSpecificPath)) {
+        fs.mkdirSync(modelSpecificPath, { recursive: true });
+      }
+
+      const response = await fetch(modelFilesApiUrl);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch model file list from ${modelFilesApiUrl}: ${response.statusText}`);
+      }
+      const files = await response.json();
+
+      if (!Array.isArray(files)) {
+          throw new Error(`Invalid response structure from ${modelFilesApiUrl}. Expected an array of files.`);
+      }
+
+      for (const fileInfo of files) {
+        if (fileInfo.type === 'file') {
+          const filePath = fileInfo.path;
+          const fileUrl = `${modelDownloadBaseUrl}${filePath}`;
+          const localFilePath = path.join(modelSpecificPath, filePath);
+          
+          const dirForFile = path.dirname(localFilePath);
+          if (!fs.existsSync(dirForFile)) {
+            fs.mkdirSync(dirForFile, { recursive: true });
+          }
+
+          // TODO: Send progress update to renderer: event.sender.send('download-progress', { modelName, file: filePath, progress: 0 });
+          console.log(`Downloading ${fileUrl} to ${localFilePath}...`);
+          
+          const fileResponse = await fetch(fileUrl);
+          if (!fileResponse.ok) {
+            console.error(`Failed to download ${fileUrl}: ${fileResponse.statusText}`);
+            continue; 
+          }
+          
+          const fileStream = fs.createWriteStream(localFilePath);
+          await new Promise((resolve, reject) => {
+            fileResponse.body.pipe(fileStream);
+            fileResponse.body.on("error", reject);
+            fileStream.on("finish", resolve);
+          });
+          
+          // TODO: Send progress update to renderer: event.sender.send('download-progress', { modelName, file: filePath, progress: 100 });
+          console.log(`Downloaded ${filePath} successfully.`);
+        }
+      }
+      return { success: true, message: `Model ${modelName} downloaded successfully to ${modelSpecificPath}` };
+    } catch (error) {
+      console.error(`Error downloading model ${modelName}:`, error);
+      // Ensure error is serializable
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      return { success: false, message: errorMessage || "Unknown error during model download." };
+    }
+  });
 
   createWindow()
 

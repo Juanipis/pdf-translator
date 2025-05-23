@@ -51,6 +51,8 @@
     "framer-motion": "^12.12.1",
     "i18next": "^25.2.0",
     "lucide-react": "^0.511.0",
+    "node-fetch": "^2.7.0",
+    "onnxruntime-web": "^1.22.0",
     "pdfjs-dist": "^4.4.168",
     "react-i18next": "^15.5.1",
     "react-markdown": "^10.1.0",

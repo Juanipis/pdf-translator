@@ -2,15 +2,26 @@ export interface AIServiceSecrets {
   apiKey?: string
   connectionUrl?: string
   model?: string
+  modelsPath?: string;
   additionalParams?: Record<string, string>
+}
+
+export interface LocalOcrProviderConfig {
+  modelsPath?: string
+}
+
+export interface LocalTranslationProviderConfig {
+  modelsPath?: string
 }
 
 export interface AISecrets {
   ocr: {
     [provider: string]: AIServiceSecrets
+    local_transformers_ocr?: LocalOcrProviderConfig
   }
   translation: {
     [provider: string]: AIServiceSecrets
+    local_transformers_translation?: LocalTranslationProviderConfig
   }
 }
 
@@ -21,14 +32,16 @@ const DEFAULT_SECRETS: AISecrets = {
     azure: {},
     ollama: { connectionUrl: 'http://localhost:11434' },
     amazon: {},
-    mock: {}
+    mock: {},
+    local_transformers_ocr: { modelsPath: '' }
   },
   translation: {
     google: {},
     azure: {},
     ollama: { connectionUrl: 'http://localhost:11434' },
     openai: {},
-    mock: {}
+    mock: {},
+    local_transformers_translation: { modelsPath: '' }
   }
 }
 
