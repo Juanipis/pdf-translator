@@ -91,5 +91,5 @@ If you encounter any issues or have questions, please file an issue on the GitHu
 ---
 
 <p align="center">
-  Made with ❤️ by the PDF Translator Team
+  Made with ❤️ by the Juanipis
 </p>
