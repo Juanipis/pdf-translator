@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: pdf-translator
+appId: com.pdf-translator.app
+productName: PDF Translator
 directories:
   buildResources: build
 files:
@@ -33,13 +33,13 @@ linux:
     - AppImage
     - snap
     - deb
-  maintainer: electronjs.org
+  maintainer: pdf-translator.app
   category: Utility
 appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
 publish:
   provider: generic
-  url: https://example.com/auto-updates
+  url: https://pdf-translator.app/auto-updates
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/

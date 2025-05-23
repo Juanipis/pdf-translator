@@ -15,7 +15,7 @@ export class GoogleTranslationProvider implements TranslationModel {
       // Prepare the API URL with parameters
 
       const translation = await JsGoogleTranslateFree.translate({
-        to: options.targetLanguage,
+        to: options.targetLanguage as any,  // eslint-disable-line
         text
       })
 
