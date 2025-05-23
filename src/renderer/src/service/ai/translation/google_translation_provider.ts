@@ -1,5 +1,5 @@
 import { TranslationModel, TranslationResult } from './translation_model'
-import { SecretsManager } from '../secrets_manager'
+import JsGoogleTranslateFree from '@kreisler/js-google-translate-free'
 
 export class GoogleTranslationProvider implements TranslationModel {
   async translateText(
@@ -11,52 +11,16 @@ export class GoogleTranslationProvider implements TranslationModel {
       context?: string
     }
   ): Promise<TranslationResult> {
-    const secrets = SecretsManager.getTranslationSecret('google')
-    const apiKey = secrets.apiKey
-
-    if (!apiKey) {
-      throw new Error('Google Cloud Translation API Key is required')
-    }
-
     try {
       // Prepare the API URL with parameters
-      const apiUrl = 'https://translation.googleapis.com/language/translate/v2'
-      const params = new URLSearchParams({
-        key: apiKey,
-        q: text,
-        target: options.targetLanguage,
-        format: options.format || 'text'
+
+      const translation = await JsGoogleTranslateFree.translate({
+        to: options.targetLanguage,
+        text
       })
-
-      // Add source language if provided
-      if (options.sourceLanguage) {
-        params.append('source', options.sourceLanguage)
-      }
-
-      // Call the Google Translation API
-      const response = await fetch(`${apiUrl}?${params.toString()}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-
-      if (!response.ok) {
-        throw new Error(`Google Translation API error: ${response.statusText}`)
-      }
-
-      const result = await response.json()
-
-      if (!result.data || !result.data.translations || result.data.translations.length === 0) {
-        throw new Error('No translation data received from Google API')
-      }
-
-      const translation = result.data.translations[0]
 
       return {
-        translatedText: translation.translatedText,
-        detectedSourceLanguage: translation.detectedSourceLanguage,
-        confidence: undefined // Google doesn't provide confidence scores for translations
+        translatedText: translation
       }
     } catch (error) {
       console.error('Google Translation error:', error)
@@ -67,11 +31,10 @@ export class GoogleTranslationProvider implements TranslationModel {
   }
 
   getProviderName(): string {
-    return 'google'
+    return 'google translate'
   }
 
   async isReady(): Promise<boolean> {
-    const secrets = SecretsManager.getTranslationSecret('google')
-    return !!secrets.apiKey
+    return true
   }
 }

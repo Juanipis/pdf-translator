@@ -76,8 +76,8 @@ export class TranslationService {
     providerName: string
   ): { key: string; type: string; required: boolean; label: string }[] {
     switch (providerName) {
-      case 'google':
-        return [{ key: 'apiKey', type: 'password', required: true, label: 'API Key' }]
+      case 'google translate':
+        return []
       case 'ollama':
         return [
           { key: 'connectionUrl', type: 'text', required: true, label: 'Endpoint URL' },
