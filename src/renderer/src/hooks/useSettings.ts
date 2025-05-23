@@ -91,8 +91,9 @@ export function useSettings(): UseSettingsReturn {
       settings.ai.translationProvider
     )
 
-    setOcrSecrets(currentOcrSecrets)
-    setTranslationSecrets(currentTranslationSecrets)
+    // Convert to Record<string, unknown> to satisfy TypeScript
+    setOcrSecrets(currentOcrSecrets as unknown as Record<string, unknown>)
+    setTranslationSecrets(currentTranslationSecrets as unknown as Record<string, unknown>)
 
     if (needsReload) {
       setNeedsReload(false)
@@ -128,13 +129,13 @@ export function useSettings(): UseSettingsReturn {
   const handleOcrProviderChange = useCallback((value: string): void => {
     setOcrProvider(value)
     const providerSecrets = SecretsManager.getOcrSecret(value)
-    setOcrSecrets(providerSecrets)
+    setOcrSecrets(providerSecrets as unknown as Record<string, unknown>)
   }, [])
 
   const handleTranslationProviderChange = useCallback((value: string): void => {
     setTranslationProvider(value)
     const providerSecrets = SecretsManager.getTranslationSecret(value)
-    setTranslationSecrets(providerSecrets)
+    setTranslationSecrets(providerSecrets as unknown as Record<string, unknown>)
   }, [])
 
   const handleOcrSecretChange = useCallback((key: string, value: string): void => {
@@ -144,7 +145,9 @@ export function useSettings(): UseSettingsReturn {
       setOcrSecrets((prev) => ({
         ...prev,
         [parent]: {
-          ...prev[parent],
+          ...(typeof prev[parent] === 'object' && prev[parent] !== null
+            ? (prev[parent] as Record<string, unknown>)
+            : {}),
           [child]: value
         }
       }))
@@ -163,7 +166,9 @@ export function useSettings(): UseSettingsReturn {
       setTranslationSecrets((prev) => ({
         ...prev,
         [parent]: {
-          ...prev[parent],
+          ...(typeof prev[parent] === 'object' && prev[parent] !== null
+            ? (prev[parent] as Record<string, unknown>)
+            : {}),
           [child]: value
         }
       }))

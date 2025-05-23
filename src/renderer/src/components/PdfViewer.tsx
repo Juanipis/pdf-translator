@@ -92,7 +92,7 @@ export function PdfViewer({
       if (visibilityTimerId) clearTimeout(visibilityTimerId)
       if (animationTimerId) clearTimeout(animationTimerId)
     }
-  }, [pdfDoc]) // Re-run when pdfDoc changes
+  }, [pdfDoc]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // compute the canvas’s offset within its positioned parent
   const canvasOffset = {

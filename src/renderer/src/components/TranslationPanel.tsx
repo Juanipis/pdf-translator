@@ -136,6 +136,7 @@ export function TranslationPanel({
     }
 
     processContent()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [extractedText, autoTranslate, hasContent])
 
   const handleCopy = (): void => {

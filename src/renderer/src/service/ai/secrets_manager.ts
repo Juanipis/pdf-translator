@@ -105,6 +105,7 @@ export class SecretsManager {
         normalizedSecret.connectionUrl = url
       } catch (e) {
         console.warn('Invalid connection URL provided:', normalizedSecret.connectionUrl)
+        console.warn('Error:', e)
         // Keep the original value, app will handle connection errors gracefully
       }
     }
@@ -154,9 +155,10 @@ export class SecretsManager {
 
     // Check if the electron API and method exists
     if (window.electron && 'getSettingsService' in window.electron) {
-      const settingsService = (
-        window.electron as unknown as Record<string, Function>
-      ).getSettingsService() as { setOcrProvider: (provider: string) => void }
+      const settingsService = // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+        (window.electron as unknown as Record<string, Function>).getSettingsService() as {
+          setOcrProvider: (provider: string) => void
+        }
       settingsService.setOcrProvider(provider)
     }
   }
@@ -167,9 +169,10 @@ export class SecretsManager {
 
     // Check if the electron API and method exists
     if (window.electron && 'getSettingsService' in window.electron) {
-      const settingsService = (
-        window.electron as unknown as Record<string, Function>
-      ).getSettingsService() as { setTranslationProvider: (provider: string) => void }
+      const settingsService = // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+        (window.electron as unknown as Record<string, Function>).getSettingsService() as {
+          setTranslationProvider: (provider: string) => void
+        }
       settingsService.setTranslationProvider(provider)
     }
   }
