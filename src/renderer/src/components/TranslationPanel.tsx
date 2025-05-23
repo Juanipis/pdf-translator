@@ -18,11 +18,13 @@ import { getOcrService, getTranslationService, getSettingsService } from '../ser
 
 // Move the helper functions outside of the component
 const cleanHtmlContent = (content: string): string => {
-  // Remove markdown code block markers if present
+  // Remove everything before and including 'HTML' (with optional backticks/whitespace/newlines)
+  // Remove all trailing lines that only contain backticks and/or whitespace/newlines
   return content
-    .replace(/^```html\s*/i, '')
-    .replace(/^```\s*/i, '')
-    .replace(/\s*```$/i, '')
+    .replace(/^[\s`]*html[\s`]*\n?/i, '') // Remove up to and including 'HTML' (case-insensitive)
+    .replace(/([\r\n]*[\s`]*```[\s`]*[\r\n]*)+$/gi, '') // Remove all trailing lines with only backticks/whitespace/newlines
+    .replace(/`` `` ``/g, '')
+    .trimEnd() // Remove any extra whitespace at the end
 }
 
 const isHtmlContent = (text: string): boolean => {

@@ -6,8 +6,10 @@
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://generativelanguage.googleapis.com https://translate.googleapis.com"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://* http://* ws://* wss://* localhost:* 127.0.0.1:*"
     />
+    <!-- This allows connections to any URL while still maintaining other restrictions.
+         We've explicitly added localhost and 127.0.0.1 with any port to ensure they work reliably. -->
   </head>
 
   <body>

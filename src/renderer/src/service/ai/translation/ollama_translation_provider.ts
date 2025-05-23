@@ -1,5 +1,6 @@
 import { TranslationModel, TranslationResult } from './translation_model'
 import { SecretsManager } from '../secrets_manager'
+import { prompt1 } from './prompts'
 
 export class OllamaTranslationProvider implements TranslationModel {
   async translateText(
@@ -21,55 +22,50 @@ export class OllamaTranslationProvider implements TranslationModel {
 
     try {
       // Prepare the prompt for translation
-      let prompt = `Translate the following text to ${options.targetLanguage}:\n\n${text}\n\nTranslation:`
-
-      // Add source language information if available
-      if (options.sourceLanguage) {
-        prompt = `Translate the following text from ${options.sourceLanguage} to ${options.targetLanguage}:\n\n${text}\n\nTranslation:`
+      let customPrompt = prompt1.replace('{targetLanguage}', options.targetLanguage)
+      if (options.format === 'html') {
+        customPrompt +=
+          '\n\nImportant: This text contains HTML markup. Preserve all HTML tags exactly as they appear in the original text.'
       }
+      // Add the text to translate after the prompt
+      const fullPrompt = `${customPrompt}\n\n${text}`
 
-      // Add context if provided
-      if (options.context) {
-        prompt += `\n\nContext: ${options.context}`
-      }
-
-      // Prepare the request body
+      // Prepare the request body with the correct field
       const requestBody = {
         model,
-        prompt,
+        prompt: fullPrompt,
         stream: false
       }
 
-      // Call the Ollama API
-      const response = await fetch(`${connectionUrl}/api/generate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestBody)
-      })
-
-      if (!response.ok) {
-        throw new Error(`Ollama API error: ${response.statusText}`)
-      }
-
-      const result = await response.json()
-
-      // Extract the translation from the response
-      let translatedText = result.response || ''
-
-      // Clean up the response to remove any non-translation text
-      translatedText = translatedText.trim()
-
-      // Ollama might include "Translation:" in the response, let's remove it
-      if (translatedText.toLowerCase().startsWith('translation:')) {
-        translatedText = translatedText.substring('translation:'.length).trim()
-      }
-
-      return {
-        translatedText,
-        detectedSourceLanguage: options.sourceLanguage,
-        confidence: undefined // Ollama doesn't provide confidence scores
+      // Add a timeout to the fetch request
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 60000) // 60s timeout
+      try {
+        const response = await fetch(`${connectionUrl}/api/generate`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestBody),
+          signal: controller.signal
+        })
+        clearTimeout(timeoutId)
+        if (!response.ok) {
+          throw new Error(`Ollama API error: ${response.statusText}`)
+        }
+        const result = await response.json()
+        let translatedText = result.response || ''
+        translatedText = translatedText.trim()
+        if (translatedText.toLowerCase().startsWith('translation:')) {
+          translatedText = translatedText.substring('translation:'.length).trim()
+        }
+        return {
+          translatedText,
+          detectedSourceLanguage: options.sourceLanguage,
+          confidence: undefined // Ollama doesn't provide confidence scores
+        }
+      } finally {
+        clearTimeout(timeoutId)
       }
     } catch (error) {
       console.error('Ollama Translation error:', error)

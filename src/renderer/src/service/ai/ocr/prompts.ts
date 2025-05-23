@@ -20,3 +20,4 @@ export const prompt1 = `You are an advanced Optical Character Recognition (OCR) 
     *   If no text is clearly discernible in the image, you MUST return an empty string.
     *   Do not add any commentary, explanations, or text that is not part of the extracted content or its HTML formatting.
     *   Be meticulous; try to capture all text, including headers, footers, and text in margins if they are part of the selected region.`
+export const simpleOcrPrompt = `Extract all visible text from the provided image and return it as valid HTML. If no text is found, return an empty string. Do not add any explanation or commentary, only the HTML output.`

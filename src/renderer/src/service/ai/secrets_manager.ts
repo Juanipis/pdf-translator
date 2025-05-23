@@ -73,14 +73,43 @@ export class SecretsManager {
 
   static setOcrSecret(provider: string, secret: AIServiceSecrets): void {
     const secrets = this.getSecrets()
-    secrets.ocr[provider] = secret
+    secrets.ocr[provider] = this.validateAndNormalizeSecrets(secret)
     this.saveSecrets(secrets)
   }
 
   static setTranslationSecret(provider: string, secret: AIServiceSecrets): void {
     const secrets = this.getSecrets()
-    secrets.translation[provider] = secret
+    secrets.translation[provider] = this.validateAndNormalizeSecrets(secret)
     this.saveSecrets(secrets)
+  }
+
+  // Improved method to validate and normalize connection URLs
+  private static validateAndNormalizeSecrets(secret: AIServiceSecrets): AIServiceSecrets {
+    const normalizedSecret = { ...secret }
+
+    // Ensure connection URL has proper format if provided
+    if (normalizedSecret.connectionUrl) {
+      try {
+        // Remove trailing slashes for consistency
+        let url = normalizedSecret.connectionUrl.trim().replace(/\/+$/, '')
+
+        // Handle localhost special case - make sure it has a protocol
+        if (url.match(/^localhost(:\d+)?($|\/)/)) {
+          url = 'http://' + url
+        } else if (url.match(/^127\.0\.0\.1(:\d+)?($|\/)/)) {
+          url = 'http://' + url
+        }
+
+        // Check if it's a valid URL
+        new URL(url)
+        normalizedSecret.connectionUrl = url
+      } catch (e) {
+        console.warn('Invalid connection URL provided:', normalizedSecret.connectionUrl)
+        // Keep the original value, app will handle connection errors gracefully
+      }
+    }
+
+    return normalizedSecret
   }
 
   static getSelectedOcrProvider(): string {
