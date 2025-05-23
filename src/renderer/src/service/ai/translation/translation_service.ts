@@ -47,7 +47,9 @@ export class TranslationService {
     const isReady = await provider.isReady()
     if (!isReady) {
       // Fallback to mock provider if selected provider is not ready
-      console.warn(`Translation provider '${selectedProvider}' is not ready. Falling back to mock provider.`)
+      console.warn(
+        `Translation provider '${selectedProvider}' is not ready. Falling back to mock provider.`
+      )
       provider = this.providers.get('mock')
       if (!provider) {
         throw new Error('No translation provider available. Mock provider not found.')

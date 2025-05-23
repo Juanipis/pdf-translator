@@ -47,10 +47,19 @@ export function EmptyState({
           boxShadow: '0 0 0 4px var(--accent-a2)' // Subtle outer ring
         }}
       >
-        {React.cloneElement(icon as React.ReactElement, {
-          size: (icon as React.ReactElement).props.size || 48,
-          strokeWidth: 1.5
-        })}
+        {React.isValidElement(icon)
+          ? React.cloneElement(
+              icon as React.ReactElement<{ size?: number; strokeWidth?: number }>,
+              {
+                ...(icon.props && typeof icon.props === 'object' && 'size' in icon.props
+                  ? { size: (icon.props as { size?: number }).size || 48 }
+                  : { size: 48 }),
+                ...(icon.props && typeof icon.props === 'object' && 'strokeWidth' in icon.props
+                  ? { strokeWidth: (icon.props as { strokeWidth?: number }).strokeWidth || 1.5 }
+                  : { strokeWidth: 1.5 })
+              }
+            )
+          : icon}
       </Box>
       <Heading as="h3" size="5" weight="medium" mb="1" color="gray">
         {' '}

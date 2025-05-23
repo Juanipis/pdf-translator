@@ -3,7 +3,6 @@ import { prompt1 } from './prompts'
 import { TranslationModel, TranslationResult } from './translation_model'
 import { GoogleGenAI } from '@google/genai'
 
-
 export class GeminiTranslationProvider implements TranslationModel {
   async translateText(
     text: string,

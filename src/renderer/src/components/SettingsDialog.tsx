@@ -16,7 +16,6 @@ import {
   Settings as SettingsIcon,
   X as CloseIcon,
   Languages,
-  User,
   Palette,
   Image,
   Globe
@@ -26,7 +25,7 @@ import { useTheme } from '../context/ThemeContext'
 import { useSettings } from '../hooks'
 
 // Helper component for consistent input styling
-const StyledInput = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
+const StyledInput: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = (props) => (
   <input
     {...props}
     style={{
@@ -37,6 +36,7 @@ const StyledInput = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
       fontSize: 'var(--font-size-2)', // Use theme font size
       backgroundColor: 'var(--gray-a2)', // Subtle background
       color: 'var(--gray-12)',
+      // eslint-disable-next-line react/prop-types
       ...props.style
     }}
   />
@@ -91,22 +91,18 @@ export function SettingsDialog(): React.ReactElement {
         </IconButton>
       </Dialog.Trigger>
       <Dialog.Content style={{ maxWidth: 550, borderRadius: 'var(--radius-4)' }}>
-        {' '}
         {/* Increased max width and radius */}
-        <Dialog.Title asChild>
-          <Flex justify="between" align="center" mb="4">
-            <Heading size="5" as="h2" weight="medium">
-              {' '}
-              {/* Adjusted size and weight */}
-              {t('settings.title')}
-            </Heading>
-            <Dialog.Close>
-              <IconButton variant="ghost" color="gray" aria-label={t('settings.closeButton')}>
-                <CloseIcon size={16} />
-              </IconButton>
-            </Dialog.Close>
-          </Flex>
-        </Dialog.Title>
+        <Flex justify="between" align="center" mb="4">
+          <Heading size="5" as="h2" weight="medium">
+            {/* Adjusted size and weight */}
+            {t('settings.title')}
+          </Heading>
+          <Dialog.Close>
+            <IconButton variant="ghost" color="gray" aria-label={t('settings.closeButton')}>
+              <CloseIcon size={16} />
+            </IconButton>
+          </Dialog.Close>
+        </Flex>
         <Tabs.Root defaultValue="general">
           <Tabs.List>
             <Tabs.Trigger value="general">
@@ -120,10 +116,6 @@ export function SettingsDialog(): React.ReactElement {
             <Tabs.Trigger value="ai">
               <Globe size={16} style={{ marginRight: 'var(--space-2)' }} />
               {t('settings.tabs.ai')}
-            </Tabs.Trigger>
-            <Tabs.Trigger value="account">
-              <User size={16} style={{ marginRight: 'var(--space-2)' }} />
-              {t('settings.tabs.account')}
             </Tabs.Trigger>
           </Tabs.List>
 
@@ -293,22 +285,34 @@ export function SettingsDialog(): React.ReactElement {
                           {' '}
                           {/* Increased gap */}
                           {ocrConfigFields.map((field) => {
-                            const value = field.key.includes('.')
-                              ? field.key.split('.').reduce((obj, key) => obj?.[key], ocrSecrets)
-                              : ocrSecrets[field.key] || ''
-
+                            let value = ''
+                            if (field.key.includes('.')) {
+                              const keys = field.key.split('.')
+                              let obj: unknown = ocrSecrets
+                              for (const k of keys) {
+                                if (obj && typeof obj === 'object' && k in obj) {
+                                  obj = (obj as Record<string, unknown>)[k]
+                                } else {
+                                  obj = undefined
+                                  break
+                                }
+                              }
+                              value = typeof obj === 'string' ? obj : ''
+                            } else {
+                              const v = ocrSecrets[field.key]
+                              value = typeof v === 'string' ? v : ''
+                            }
                             return (
                               <Flex key={field.key} justify="between" align="center">
                                 <Text as="label" size="2" htmlFor={`ocr-${field.key}`}>
                                   {field.label}
-                                  {field.required && <Text color="red"> *</Text>}{' '}
-                                  {/* Indicate required */}
+                                  {field.required && <Text color="red"> *</Text>}
                                 </Text>
                                 <Box style={{ width: '60%' }}>
-                                  <StyledInput /* Use StyledInput */
+                                  <StyledInput
                                     id={`ocr-${field.key}`}
                                     type={field.type}
-                                    value={value || ''}
+                                    value={value}
                                     onChange={(e) =>
                                       handleOcrSecretChange(field.key, e.target.value)
                                     }
@@ -371,24 +375,34 @@ export function SettingsDialog(): React.ReactElement {
                           {' '}
                           {/* Increased gap */}
                           {translationConfigFields.map((field) => {
-                            const value = field.key.includes('.')
-                              ? field.key
-                                  .split('.')
-                                  .reduce((obj, key) => obj?.[key], translationSecrets)
-                              : translationSecrets[field.key] || ''
-
+                            let value = ''
+                            if (field.key.includes('.')) {
+                              const keys = field.key.split('.')
+                              let obj: unknown = translationSecrets
+                              for (const k of keys) {
+                                if (obj && typeof obj === 'object' && k in obj) {
+                                  obj = (obj as Record<string, unknown>)[k]
+                                } else {
+                                  obj = undefined
+                                  break
+                                }
+                              }
+                              value = typeof obj === 'string' ? obj : ''
+                            } else {
+                              const v = translationSecrets[field.key]
+                              value = typeof v === 'string' ? v : ''
+                            }
                             return (
                               <Flex key={field.key} justify="between" align="center">
                                 <Text as="label" size="2" htmlFor={`translation-${field.key}`}>
                                   {field.label}
-                                  {field.required && <Text color="red"> *</Text>}{' '}
-                                  {/* Indicate required */}
+                                  {field.required && <Text color="red"> *</Text>}
                                 </Text>
                                 <Box style={{ width: '60%' }}>
-                                  <StyledInput /* Use StyledInput */
+                                  <StyledInput
                                     id={`translation-${field.key}`}
                                     type={field.type}
-                                    value={value || ''}
+                                    value={value}
                                     onChange={(e) =>
                                       handleTranslationSecretChange(field.key, e.target.value)
                                     }
@@ -403,34 +417,6 @@ export function SettingsDialog(): React.ReactElement {
                       </Box>
                     )}
                   </Box>
-                </Flex>
-              </Card>
-            </Tabs.Content>
-            <Tabs.Content value="account">
-              <Card variant="surface" mt="2" style={{ background: 'var(--gray-a2)' }}>
-                {' '}
-                {/* Subtle background */}
-                <Flex direction="column" gap="3">
-                  <Flex gap="2" align="center" mb="2">
-                    <User size={20} color="var(--accent-9)" /> {/* Accent color & size */}
-                    <Text as="div" size="3" weight="medium">
-                      {' '}
-                      {/* Adjusted size & weight */}
-                      {t('settings.account.userProfile')}
-                    </Text>
-                  </Flex>
-
-                  <Text as="p" size="2" color="gray">
-                    {t('settings.account.loginDescription')}
-                  </Text>
-
-                  <Flex justify="center" mt="2">
-                    <Button size="2" variant="soft" color="blue">
-                      {' '}
-                      {/* Soft blue variant */}
-                      {t('settings.account.signIn')}
-                    </Button>
-                  </Flex>
                 </Flex>
               </Card>
             </Tabs.Content>

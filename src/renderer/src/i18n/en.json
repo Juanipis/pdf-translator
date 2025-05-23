@@ -88,6 +88,7 @@
     "lightMode": "Light",
     "darkMode": "Dark",
     "toggleInHeader": "toggle in header",
+    "autoTranslate": "Auto-translate",
     "tabs": {
       "general": "General",
       "appearance": "Appearance",

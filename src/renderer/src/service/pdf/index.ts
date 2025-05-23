@@ -67,7 +67,7 @@ export class PdfService {
     const page = await pdfDoc.getPage(pageNum)
     const viewport = page.getViewport({ scale })
     const context = canvas.getContext('2d')
-    
+
     if (!context) {
       throw new Error('Canvas context not available')
     }
@@ -82,7 +82,7 @@ export class PdfService {
 
     const renderTask = page.render(renderContext)
     this.renderTaskRef = renderTask
-    
+
     try {
       await renderTask.promise
     } catch (error) {
@@ -104,11 +104,11 @@ export class PdfService {
   ): Promise<PdfPoint> {
     const page = await pdfDoc.getPage(pageNum)
     const viewport = page.getViewport({ scale: 1 })
-    
+
     // Adjust for scroll position and scale
     const adjustedX = (canvasPoint.x + containerScrollLeft) / scale
     const adjustedY = (canvasPoint.y + containerScrollTop) / scale
-    
+
     // Convert to PDF coordinates
     const pdfPoint = viewport.convertToPdfPoint(adjustedX, adjustedY)
     return { x: pdfPoint[0], y: pdfPoint[1] }
@@ -158,7 +158,13 @@ export class PdfService {
     let extractedText = ''
 
     for (const item of textContent.items) {
-      if ('str' in item && item.str && item.transform && Array.isArray(item.transform) && item.transform.length >= 6) {
+      if (
+        'str' in item &&
+        item.str &&
+        item.transform &&
+        Array.isArray(item.transform) &&
+        item.transform.length >= 6
+      ) {
         const tx = item.transform
         const itemX = tx[4]
         const itemY = tx[5]
@@ -194,10 +200,7 @@ export class PdfService {
     return extractedText.trim()
   }
 
-  captureImageFromSelection(
-    canvas: HTMLCanvasElement,
-    selection: PdfSelection
-  ): string {
+  captureImageFromSelection(canvas: HTMLCanvasElement, selection: PdfSelection): string {
     const tempCanvas = document.createElement('canvas')
     tempCanvas.width = selection.width
     tempCanvas.height = selection.height
@@ -231,4 +234,4 @@ export class PdfService {
   }
 }
 
-export const pdfService = new PdfService() 
+export const pdfService = new PdfService()

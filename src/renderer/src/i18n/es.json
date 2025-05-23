@@ -78,6 +78,7 @@
     "lightMode": "Claro",
     "darkMode": "Oscuro",
     "toggleInHeader": "cambiar en el encabezado",
+    "autoTranslate": "Auto-traducir",
     "tabs": {
       "general": "General",
       "appearance": "Apariencia",
@@ -85,7 +86,7 @@
       "account": "Cuenta",
       "ai": "IA"
     },
-    "ai":{
+    "ai": {
       "ocrProvider": "Seleccionar proveedor de OCR",
       "selectProvider": "Seleccionar proveedor",
       "translationProvider": "Seleccionar proveedor de traducción",
