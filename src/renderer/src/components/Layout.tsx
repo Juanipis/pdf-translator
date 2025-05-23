@@ -1,4 +1,4 @@
-import { Button, Flex, Box, Heading, Card, IconButton, Tooltip } from '@radix-ui/themes'
+import { Button, Flex, Box, Heading, Card, IconButton, Tooltip, Text } from '@radix-ui/themes'
 import { UploadCloud, BookOpenCheck, Moon, Sun, X } from 'lucide-react'
 import { SettingsDialog } from './SettingsDialog'
 import { PdfViewer } from './PdfViewer'
@@ -95,17 +95,48 @@ export function Layout(): React.ReactElement {
       <Flex flexGrow="1" p="4" gap="4" style={{ overflow: 'hidden' }}>
         {/* Left column */}
         <Flex direction="column" style={{ width: '50%' }} gap="4">
-          <Card style={{ boxShadow: 'var(--shadow-2)' }}>
-            {' '}
-            {/* Added subtle shadow */}
-            <Flex align="center" justify="between" p="3">
-              <Heading as="h2" size="4" weight="medium">
+          <Card
+            style={{
+              boxShadow: 'var(--shadow-2)',
+              height: '72px',
+              minHeight: '72px', // Forzar altura mínima
+              maxHeight: '72px', // Forzar altura máxima
+              overflow: 'hidden', // Evitar que el contenido desborde
+              flexShrink: 0, // Evitar que se comprima
+              flexGrow: 0 // Evitar que crezca
+            }}
+          >
+            <Flex
+              align="center"
+              justify="between"
+              px="4"
+              py="3"
+              style={{
+                height: '100%', // Asegurar que el flex ocupa toda la altura
+                width: '100%'
+              }}
+            >
+              <Heading
+                as="h2"
+                size="5"
+                weight="medium"
+                style={{
+                  flexGrow: 1, // Allow heading to take available space
+                  flexShrink: 1, // Allow heading to shrink
+                  minWidth: 0, // Crucial for flex shrinking and ellipsis
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  marginRight: 'var(--space-3)' // Add space before buttons
+                }}
+              >
                 {' '}
-                {/* Adjusted size and weight */}
+                {/* Changed size="4" to size="5" */} {/* Adjusted size and weight */}
                 {t('layout.sourceDocumentTitle')}
               </Heading>
-              <Flex gap="2" align="center">
+              <Flex gap="2" align="center" style={{ flexShrink: 0 }}>
                 {' '}
+                {/* Prevent button group from shrinking excessively */}{' '}
                 {/* Ensure vertical alignment */}
                 {selectedFile && (
                   <Tooltip content={t('layout.clearFile')}>
@@ -127,18 +158,33 @@ export function Layout(): React.ReactElement {
                   onClick={handleUploadClick}
                   size="2"
                   variant={selectedFile ? 'soft' : 'solid'}
+                  style={{
+                    maxWidth: '220px', // Set a max-width for the button
+                    display: 'inline-flex', // Ensure proper alignment of icon and text
+                    alignItems: 'center',
+                    overflow: 'hidden' // Needed for text-overflow to work on children in some cases
+                  }}
                 >
-                  {' '}
-                  {/* Change variant if file selected */}
                   <UploadCloud
                     size={16}
-                    style={{ marginRight: selectedFile ? '0' : 'var(--space-2)' }}
+                    style={{
+                      marginRight: 'var(--space-2)', // Consistent margin for the icon
+                      flexShrink: 0 // Prevent icon from shrinking
+                    }}
                   />
-                  {selectedFile
-                    ? selectedFile.name.length > 20
-                      ? `${selectedFile.name.substring(0, 17)}...`
-                      : selectedFile.name
-                    : t('layout.uploadPdfButton')}
+                  <Text
+                    as="span"
+                    style={{
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      minWidth: 0 // Allow shrinking for ellipsis to work in a flex context
+                    }}
+                  >
+                    {selectedFile
+                      ? selectedFile.name // Display full name, CSS will truncate
+                      : t('layout.uploadPdfButton')}
+                  </Text>
                 </Button>
               </Flex>
             </Flex>

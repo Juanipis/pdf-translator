@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import 'pdfjs-dist/web/pdf_viewer.css'
 import { Box, Flex, IconButton, Text, Card, Tooltip, Badge } from '@radix-ui/themes'
 import {
@@ -30,6 +30,8 @@ export function PdfViewer({
   onImageExtracted
 }: PdfViewerProps): React.ReactElement {
   const { t } = useTranslation()
+  const [isSelectionHintVisible, setIsSelectionHintVisible] = useState(false)
+  const [isHintAnimatingOut, setIsHintAnimatingOut] = useState(false)
 
   const {
     // Refs
@@ -57,6 +59,41 @@ export function PdfViewer({
     toggleFullscreen
   } = usePdfViewer({ file, onTextExtracted, onImageExtracted })
 
+  useEffect(() => {
+    let visibilityTimerId: NodeJS.Timeout | undefined
+    let animationTimerId: NodeJS.Timeout | undefined
+
+    if (pdfDoc) {
+      setIsSelectionHintVisible(true)
+      setIsHintAnimatingOut(false) // Ensure it's not animating out when appearing
+
+      visibilityTimerId = setTimeout(() => {
+        setIsHintAnimatingOut(true)
+        animationTimerId = setTimeout(() => {
+          setIsSelectionHintVisible(false)
+          setIsHintAnimatingOut(false)
+        }, 300) // Duration of slideDown animation
+      }, 5000) // Show hint for 5 seconds
+    } else {
+      if (isSelectionHintVisible) {
+        // If hint is visible and PDF is removed, animate out
+        setIsHintAnimatingOut(true)
+        animationTimerId = setTimeout(() => {
+          setIsSelectionHintVisible(false)
+          setIsHintAnimatingOut(false)
+        }, 300) // Duration of slideDown animation
+      } else {
+        setIsSelectionHintVisible(false) // Hide if no PDF and not visible
+        setIsHintAnimatingOut(false)
+      }
+    }
+
+    return () => {
+      if (visibilityTimerId) clearTimeout(visibilityTimerId)
+      if (animationTimerId) clearTimeout(animationTimerId)
+    }
+  }, [pdfDoc]) // Re-run when pdfDoc changes
+
   // compute the canvas’s offset within its positioned parent
   const canvasOffset = {
     x: canvasRef.current?.offsetLeft || 0,
@@ -65,10 +102,27 @@ export function PdfViewer({
 
   return (
     <Flex direction="column" style={{ height: '100%', width: '100%' }} gap="2" ref={containerRef}>
-      <Card style={{ boxShadow: 'var(--shadow-2)' }}>
-        {' '}
-        {/* Added subtle shadow */}
-        <Flex p="2" justify="between" align="center">
+      <Card
+        style={{
+          boxShadow: 'var(--shadow-2)',
+          height: '60px',
+          minHeight: '60px', // Forzar altura mínima
+          maxHeight: '60px', // Forzar altura máxima
+          overflow: 'hidden', // Evitar que el contenido desborde
+          flexShrink: 0, // Evitar que se comprima
+          flexGrow: 0 // Evitar que crezca
+        }}
+      >
+        <Flex
+          px="3"
+          py="2"
+          justify="between"
+          align="center"
+          style={{
+            height: '100%', // Asegurar que el flex ocupa toda la altura
+            width: '100%'
+          }}
+        >
           <Flex gap="2" align="center">
             <Tooltip content={t('pdfViewer.previousPage')}>
               <IconButton
@@ -99,7 +153,6 @@ export function PdfViewer({
               </IconButton>
             </Tooltip>
           </Flex>
-
           <Flex gap="2" align="center">
             <Tooltip content={t('pdfViewer.zoomOut')}>
               <IconButton
@@ -169,10 +222,10 @@ export function PdfViewer({
           flexGrow: 1,
           overflow: 'hidden',
           position: 'relative',
-          border: '1px solid var(--gray-a5)', // More subtle border
+          border: '1px solid var(--gray-a5)',
           borderRadius: 'var(--radius-3)',
-          backgroundColor: 'var(--gray-a2)', // Lighter background for canvas area
-          boxShadow: 'var(--shadow-1)' // Inner shadow for depth
+          backgroundColor: 'var(--gray-a2)',
+          boxShadow: 'var(--shadow-1)'
         }}
       >
         {pdfDoc && (
@@ -268,7 +321,7 @@ export function PdfViewer({
           </Flex>
         )}
 
-        {pdfDoc && (
+        {isSelectionHintVisible && (
           <Box
             style={{
               position: 'absolute',
@@ -280,7 +333,10 @@ export function PdfViewer({
               backdropFilter: 'blur(10px)', // Stronger blur
               padding: '8px 14px', // Adjusted padding
               borderRadius: 'var(--radius-3)',
-              boxShadow: 'var(--shadow-3)' // Slightly stronger shadow
+              boxShadow: 'var(--shadow-3)', // Slightly stronger shadow
+              animation: isHintAnimatingOut
+                ? 'slideDown 0.3s ease-out forwards'
+                : 'slideUp 0.3s ease-out forwards'
             }}
           >
             <Text size="1">
@@ -375,6 +431,31 @@ export function PdfViewer({
           )}
         </Box>
       </Box>
+      {/* Keyframes for animations */}
+      <style>
+        {`
+          @keyframes slideUp {
+            from {
+              opacity: 0;
+              transform: translate(-50%, 20px);
+            }
+            to {
+              opacity: 1;
+              transform: translate(-50%, 0);
+            }
+          }
+          @keyframes slideDown {
+            from {
+              opacity: 1;
+              transform: translate(-50%, 0);
+            }
+            to {
+              opacity: 0;
+              transform: translate(-50%, 20px);
+            }
+          }
+        `}
+      </style>
     </Flex>
   )
 }

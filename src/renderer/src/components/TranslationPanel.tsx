@@ -161,22 +161,46 @@ export function TranslationPanel({
     <Card style={{ width: '100%', height: '100%', boxShadow: 'var(--shadow-4)' }}>
       <Flex direction="column" style={{ height: '100%' }}>
         <Box
-          p="3"
+          px="4"
+          py="3"
           style={{
-            borderBottom: '1px solid var(--gray-a6)' // Use alpha color for subtle border
+            borderBottom: '1px solid var(--gray-a6)', // Use alpha color for subtle border
+            height: '72px', // Misma altura que el header de Source Document
+            minHeight: '72px',
+            maxHeight: '72px',
+            flexShrink: 0,
+            flexGrow: 0
           }}
         >
-          <Flex justify="between" align="center">
-            <Heading as="h2" size="4" weight="medium">
-              {' '}
-              {/* Adjusted size and weight */}
+          <Flex
+            justify="between"
+            align="center"
+            style={{
+              height: '100%', // Asegurar que el flex ocupa toda la altura
+              width: '100%'
+            }}
+          >
+            <Heading
+              as="h2"
+              size="5"
+              weight="medium"
+              style={{
+                flexGrow: 1,
+                flexShrink: 1,
+                minWidth: 0,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                marginRight: 'var(--space-3)'
+              }}
+            >
               {t('translationPanel.title')}
             </Heading>
             {hasActiveDocument &&
               hasContent && ( // Show only if there's content and an active doc
-                <Flex gap="3" align="center">
+                <Flex gap="3" align="center" style={{ flexShrink: 0 }}>
                   {' '}
-                  {/* Increased gap */}
+                  {/* Prevent select group from shrinking excessively */} {/* Increased gap */}
                   <Select.Root value={targetLanguage} onValueChange={setTargetLanguage}>
                     <Select.Trigger
                       variant="soft" // Softer trigger variant
