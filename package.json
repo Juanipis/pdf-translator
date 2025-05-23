@@ -48,6 +48,7 @@
     "@radix-ui/themes": "^3.2.1",
     "@types/pdfjs-dist": "^2.10.377",
     "electron-updater": "^6.3.9",
+    "framer-motion": "^12.12.1",
     "i18next": "^25.2.0",
     "lucide-react": "^0.511.0",
     "pdfjs-dist": "^4.4.168",

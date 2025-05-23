@@ -25,6 +25,23 @@ import { useTranslation } from 'react-i18next'
 import { useTheme } from '../context/ThemeContext'
 import { useSettings } from '../hooks'
 
+// Helper component for consistent input styling
+const StyledInput = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
+  <input
+    {...props}
+    style={{
+      width: '100%',
+      padding: 'var(--space-2) var(--space-3)', // Use theme spacing
+      borderRadius: 'var(--radius-2)',
+      border: '1px solid var(--gray-a7)', // Slightly more prominent border
+      fontSize: 'var(--font-size-2)', // Use theme font size
+      backgroundColor: 'var(--gray-a2)', // Subtle background
+      color: 'var(--gray-12)',
+      ...props.style
+    }}
+  />
+)
+
 export function SettingsDialog(): React.ReactElement {
   const { t } = useTranslation()
   const { mode } = useTheme()
@@ -73,10 +90,14 @@ export function SettingsDialog(): React.ReactElement {
           <SettingsIcon size={20} />
         </IconButton>
       </Dialog.Trigger>
-      <Dialog.Content style={{ maxWidth: 500 }}>
+      <Dialog.Content style={{ maxWidth: 550, borderRadius: 'var(--radius-4)' }}>
+        {' '}
+        {/* Increased max width and radius */}
         <Dialog.Title asChild>
           <Flex justify="between" align="center" mb="4">
-            <Heading size="4" as="h2">
+            <Heading size="5" as="h2" weight="medium">
+              {' '}
+              {/* Adjusted size and weight */}
               {t('settings.title')}
             </Heading>
             <Dialog.Close>
@@ -86,28 +107,47 @@ export function SettingsDialog(): React.ReactElement {
             </Dialog.Close>
           </Flex>
         </Dialog.Title>
-
         <Tabs.Root defaultValue="general">
           <Tabs.List>
-            <Tabs.Trigger value="general">{t('settings.tabs.general')}</Tabs.Trigger>
-            <Tabs.Trigger value="appearance">{t('settings.tabs.appearance')}</Tabs.Trigger>
-            <Tabs.Trigger value="ai">{t('settings.tabs.ai')}</Tabs.Trigger>
-            <Tabs.Trigger value="account">{t('settings.tabs.account')}</Tabs.Trigger>
+            <Tabs.Trigger value="general">
+              <Languages size={16} style={{ marginRight: 'var(--space-2)' }} />
+              {t('settings.tabs.general')}
+            </Tabs.Trigger>
+            <Tabs.Trigger value="appearance">
+              <Palette size={16} style={{ marginRight: 'var(--space-2)' }} />
+              {t('settings.tabs.appearance')}
+            </Tabs.Trigger>
+            <Tabs.Trigger value="ai">
+              <Globe size={16} style={{ marginRight: 'var(--space-2)' }} />
+              {t('settings.tabs.ai')}
+            </Tabs.Trigger>
+            <Tabs.Trigger value="account">
+              <User size={16} style={{ marginRight: 'var(--space-2)' }} />
+              {t('settings.tabs.account')}
+            </Tabs.Trigger>
           </Tabs.List>
 
-          <Box pt="3">
+          <Box pt="4">
+            {' '}
+            {/* Increased padding top */}
             <Tabs.Content value="general">
-              <Card variant="surface" mt="2">
-                <Flex direction="column" gap="3">
+              <Card variant="surface" mt="2" style={{ background: 'var(--gray-a2)' }}>
+                {' '}
+                {/* Subtle background */}
+                <Flex direction="column" gap="4">
+                  {' '}
+                  {/* Increased gap */}
                   <Flex justify="between" align="center">
                     <Flex gap="2" align="center">
-                      <Languages size={18} />
-                      <Text as="label" size="2" weight="bold" htmlFor="language-select">
+                      <Languages size={18} color="var(--accent-9)" /> {/* Accent color for icon */}
+                      <Text as="label" size="2" weight="medium" htmlFor="language-select">
+                        {' '}
+                        {/* Medium weight */}
                         {t('settings.language')}
                       </Text>
                     </Flex>
                     <Select.Root value={language} onValueChange={handleLanguageChange}>
-                      <Select.Trigger id="language-select" />
+                      <Select.Trigger id="language-select" variant="soft" /> {/* Soft variant */}
                       <Select.Content>
                         <Select.Group>
                           <Select.Label>{t('settings.selectLanguage')}</Select.Label>
@@ -120,11 +160,12 @@ export function SettingsDialog(): React.ReactElement {
                       </Select.Content>
                     </Select.Root>
                   </Flex>
-
                   <Flex justify="between" align="center">
                     <Flex gap="2" align="center">
-                      <Palette size={18} />
-                      <Text as="div" size="2" weight="bold">
+                      <Palette size={18} color="var(--accent-9)" /> {/* Accent color for icon */}
+                      <Text as="div" size="2" weight="medium">
+                        {' '}
+                        {/* Medium weight */}
                         {t('settings.colorTheme')}
                       </Text>
                     </Flex>
@@ -133,36 +174,47 @@ export function SettingsDialog(): React.ReactElement {
                       <Text size="1"> ({t('settings.toggleInHeader')})</Text>
                     </Text>
                   </Flex>
-
                   <Flex justify="between" align="center">
-                    <Text as="div" size="2">
+                    <Text as="div" size="2" weight="medium">
+                      {' '}
+                      {/* Medium weight */}
                       {t('settings.autoTranslate')}
                     </Text>
-                    <Switch checked={autoTranslate} onCheckedChange={handleAutoTranslateChange} />
+                    <Switch
+                      checked={autoTranslate}
+                      onCheckedChange={handleAutoTranslateChange}
+                      color="blue" // Explicit color
+                    />
                   </Flex>
                 </Flex>
               </Card>
             </Tabs.Content>
-
             <Tabs.Content value="appearance">
-              <Card variant="surface" mt="2">
-                <Flex direction="column" gap="3">
+              <Card variant="surface" mt="2" style={{ background: 'var(--gray-a2)' }}>
+                {' '}
+                {/* Subtle background */}
+                <Flex direction="column" gap="4">
+                  {' '}
+                  {/* Increased gap */}
                   <Text as="p" size="2" color="gray" mb="2">
                     {t('settings.appearance.description')}
                   </Text>
-
                   <Flex justify="between" align="center">
-                    <Text as="div" size="2">
+                    <Text as="div" size="2" weight="medium">
+                      {' '}
+                      {/* Medium weight */}
                       {t('settings.appearance.showPageNumbers')}
                     </Text>
                     <Switch
                       checked={appearance.showPageNumbers}
                       onCheckedChange={(value) => handleAppearanceChange('showPageNumbers', value)}
+                      color="blue" // Explicit color
                     />
                   </Flex>
-
                   <Flex justify="between" align="center">
-                    <Text as="div" size="2">
+                    <Text as="div" size="2" weight="medium">
+                      {' '}
+                      {/* Medium weight */}
                       {t('settings.appearance.highlightExtractedText')}
                     </Text>
                     <Switch
@@ -170,30 +222,40 @@ export function SettingsDialog(): React.ReactElement {
                       onCheckedChange={(value) =>
                         handleAppearanceChange('highlightExtractedText', value)
                       }
+                      color="blue" // Explicit color
                     />
                   </Flex>
-
                   <Flex justify="between" align="center">
-                    <Text as="div" size="2">
+                    <Text as="div" size="2" weight="medium">
+                      {' '}
+                      {/* Medium weight */}
                       {t('settings.appearance.showToolbar')}
                     </Text>
                     <Switch
                       checked={appearance.showToolbar}
                       onCheckedChange={(value) => handleAppearanceChange('showToolbar', value)}
+                      color="blue" // Explicit color
                     />
                   </Flex>
                 </Flex>
               </Card>
             </Tabs.Content>
-
             <Tabs.Content value="ai">
-              <Card variant="surface" mt="2">
-                <Flex direction="column" gap="4">
+              <Card variant="surface" mt="2" style={{ background: 'var(--gray-a2)' }}>
+                {' '}
+                {/* Subtle background */}
+                <Flex direction="column" gap="5">
+                  {' '}
+                  {/* Increased gap */}
                   {/* OCR Provider Section */}
                   <Box>
-                    <Flex gap="2" align="center" mb="2">
-                      <Image size={18} />
-                      <Text as="div" size="2" weight="bold">
+                    <Flex gap="2" align="center" mb="3">
+                      {' '}
+                      {/* Increased margin bottom */}
+                      <Image size={20} color="var(--accent-9)" /> {/* Accent color & size */}
+                      <Text as="div" size="3" weight="medium">
+                        {' '}
+                        {/* Adjusted size & weight */}
                         {t('settings.ai.ocrProvider')}
                       </Text>
                     </Flex>
@@ -203,7 +265,8 @@ export function SettingsDialog(): React.ReactElement {
                         {t('settings.ai.selectProvider')}
                       </Text>
                       <Select.Root value={ocrProvider} onValueChange={handleOcrProviderChange}>
-                        <Select.Trigger id="ocr-provider-select" />
+                        <Select.Trigger id="ocr-provider-select" variant="soft" />{' '}
+                        {/* Soft variant */}
                         <Select.Content>
                           <Select.Group>
                             <Select.Label>{t('settings.ai.availableProviders')}</Select.Label>
@@ -218,12 +281,17 @@ export function SettingsDialog(): React.ReactElement {
                     </Flex>
 
                     {ocrConfigFields.length > 0 && (
-                      <Box>
-                        <Text as="p" size="2" mb="2">
+                      <Box mt="3">
+                        {' '}
+                        {/* Added margin top */}
+                        <Text as="p" size="2" mb="2" color="gray">
+                          {' '}
+                          {/* Gray color for description */}
                           {t('settings.ai.providerConfiguration')}
                         </Text>
-
-                        <Flex direction="column" gap="2">
+                        <Flex direction="column" gap="3">
+                          {' '}
+                          {/* Increased gap */}
                           {ocrConfigFields.map((field) => {
                             const value = field.key.includes('.')
                               ? field.key.split('.').reduce((obj, key) => obj?.[key], ocrSecrets)
@@ -233,22 +301,17 @@ export function SettingsDialog(): React.ReactElement {
                               <Flex key={field.key} justify="between" align="center">
                                 <Text as="label" size="2" htmlFor={`ocr-${field.key}`}>
                                   {field.label}
+                                  {field.required && <Text color="red"> *</Text>}{' '}
+                                  {/* Indicate required */}
                                 </Text>
                                 <Box style={{ width: '60%' }}>
-                                  <input
+                                  <StyledInput /* Use StyledInput */
                                     id={`ocr-${field.key}`}
                                     type={field.type}
                                     value={value || ''}
                                     onChange={(e) =>
                                       handleOcrSecretChange(field.key, e.target.value)
                                     }
-                                    style={{
-                                      width: '100%',
-                                      padding: '6px 8px',
-                                      borderRadius: 'var(--radius-2)',
-                                      border: '1px solid var(--gray-6)',
-                                      fontSize: 'var(--font-size-1)'
-                                    }}
                                     required={field.required}
                                     placeholder={`${field.label}...`}
                                   />
@@ -260,11 +323,14 @@ export function SettingsDialog(): React.ReactElement {
                       </Box>
                     )}
                   </Box>
-
                   <Box mt="3">
-                    <Flex gap="2" align="center" mb="2">
-                      <Globe size={18} />
-                      <Text as="div" size="2" weight="bold">
+                    <Flex gap="2" align="center" mb="3">
+                      {' '}
+                      {/* Increased margin bottom */}
+                      <Globe size={20} color="var(--accent-9)" /> {/* Accent color & size */}
+                      <Text as="div" size="3" weight="medium">
+                        {' '}
+                        {/* Adjusted size & weight */}
                         {t('settings.ai.translationProvider')}
                       </Text>
                     </Flex>
@@ -277,7 +343,8 @@ export function SettingsDialog(): React.ReactElement {
                         value={translationProvider}
                         onValueChange={handleTranslationProviderChange}
                       >
-                        <Select.Trigger id="translation-provider-select" />
+                        <Select.Trigger id="translation-provider-select" variant="soft" />{' '}
+                        {/* Soft variant */}
                         <Select.Content>
                           <Select.Group>
                             <Select.Label>{t('settings.ai.availableProviders')}</Select.Label>
@@ -292,12 +359,17 @@ export function SettingsDialog(): React.ReactElement {
                     </Flex>
 
                     {translationConfigFields.length > 0 && (
-                      <Box>
-                        <Text as="p" size="2" mb="2">
+                      <Box mt="3">
+                        {' '}
+                        {/* Added margin top */}
+                        <Text as="p" size="2" mb="2" color="gray">
+                          {' '}
+                          {/* Gray color for description */}
                           {t('settings.ai.providerConfiguration')}
                         </Text>
-
-                        <Flex direction="column" gap="2">
+                        <Flex direction="column" gap="3">
+                          {' '}
+                          {/* Increased gap */}
                           {translationConfigFields.map((field) => {
                             const value = field.key.includes('.')
                               ? field.key
@@ -309,22 +381,17 @@ export function SettingsDialog(): React.ReactElement {
                               <Flex key={field.key} justify="between" align="center">
                                 <Text as="label" size="2" htmlFor={`translation-${field.key}`}>
                                   {field.label}
+                                  {field.required && <Text color="red"> *</Text>}{' '}
+                                  {/* Indicate required */}
                                 </Text>
                                 <Box style={{ width: '60%' }}>
-                                  <input
+                                  <StyledInput /* Use StyledInput */
                                     id={`translation-${field.key}`}
                                     type={field.type}
                                     value={value || ''}
                                     onChange={(e) =>
                                       handleTranslationSecretChange(field.key, e.target.value)
                                     }
-                                    style={{
-                                      width: '100%',
-                                      padding: '6px 8px',
-                                      borderRadius: 'var(--radius-2)',
-                                      border: '1px solid var(--gray-6)',
-                                      fontSize: 'var(--font-size-1)'
-                                    }}
                                     required={field.required}
                                     placeholder={`${field.label}...`}
                                   />
@@ -339,13 +406,16 @@ export function SettingsDialog(): React.ReactElement {
                 </Flex>
               </Card>
             </Tabs.Content>
-
             <Tabs.Content value="account">
-              <Card variant="surface" mt="2">
+              <Card variant="surface" mt="2" style={{ background: 'var(--gray-a2)' }}>
+                {' '}
+                {/* Subtle background */}
                 <Flex direction="column" gap="3">
                   <Flex gap="2" align="center" mb="2">
-                    <User size={18} />
-                    <Text as="div" size="2" weight="bold">
+                    <User size={20} color="var(--accent-9)" /> {/* Accent color & size */}
+                    <Text as="div" size="3" weight="medium">
+                      {' '}
+                      {/* Adjusted size & weight */}
                       {t('settings.account.userProfile')}
                     </Text>
                   </Flex>
@@ -355,7 +425,9 @@ export function SettingsDialog(): React.ReactElement {
                   </Text>
 
                   <Flex justify="center" mt="2">
-                    <Button size="2" variant="soft">
+                    <Button size="2" variant="soft" color="blue">
+                      {' '}
+                      {/* Soft blue variant */}
                       {t('settings.account.signIn')}
                     </Button>
                   </Flex>
@@ -364,15 +436,22 @@ export function SettingsDialog(): React.ReactElement {
             </Tabs.Content>
           </Box>
         </Tabs.Root>
-
-        <Flex gap="3" mt="4" justify="end">
+        <Flex gap="3" mt="5" justify="end">
+          {' '}
+          {/* Increased margin top */}
           <Dialog.Close>
-            <Button variant="soft" color="gray">
+            <Button variant="soft" color="gray" size="2">
+              {' '}
+              {/* Consistent button size */}
               {t('settings.cancelButton')}
             </Button>
           </Dialog.Close>
           <Dialog.Close>
-            <Button onClick={handleApplySettings}>{t('settings.applyButton')}</Button>
+            <Button onClick={handleApplySettings} size="2" color="blue">
+              {' '}
+              {/* Consistent button size & color */}
+              {t('settings.applyButton')}
+            </Button>
           </Dialog.Close>
         </Flex>
       </Dialog.Content>

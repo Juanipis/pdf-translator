@@ -37,11 +37,11 @@ const HtmlContent = ({ content }: { content: string }): React.ReactElement => {
     <div
       dangerouslySetInnerHTML={{ __html: cleanHtmlContent(content) }}
       style={{
-        fontSize: '14px',
-        lineHeight: '1.5',
+        fontSize: 'var(--font-size-2)', // Use theme variable
+        lineHeight: '1.6', // Increased for readability
         color: 'var(--gray-12)'
       }}
-      className="html-content"
+      className="html-content" // Keep class for global styles
     />
   )
 }
@@ -158,83 +158,104 @@ export function TranslationPanel({
   ]
 
   return (
-    <Card style={{ width: '100%', height: '100%' }}>
+    <Card style={{ width: '100%', height: '100%', boxShadow: 'var(--shadow-4)' }}>
       <Flex direction="column" style={{ height: '100%' }}>
         <Box
           p="3"
           style={{
-            borderBottom: '1px solid var(--gray-6)'
+            borderBottom: '1px solid var(--gray-a6)' // Use alpha color for subtle border
           }}
         >
           <Flex justify="between" align="center">
-            <Heading as="h2" size="3">
+            <Heading as="h2" size="4" weight="medium">
+              {' '}
+              {/* Adjusted size and weight */}
               {t('translationPanel.title')}
             </Heading>
-            {hasContent && (
-              <Flex gap="2" align="center">
-                <Select.Root value={targetLanguage} onValueChange={setTargetLanguage}>
-                  <Select.Trigger aria-label={t('translationPanel.selectLanguage')} />
-                  <Select.Content>
-                    <Select.Group>
-                      {languages.map((lang) => (
-                        <Select.Item key={lang.value} value={lang.value}>
-                          {lang.label}
-                        </Select.Item>
-                      ))}
-                    </Select.Group>
-                  </Select.Content>
-                </Select.Root>
-              </Flex>
-            )}
+            {hasActiveDocument &&
+              hasContent && ( // Show only if there's content and an active doc
+                <Flex gap="3" align="center">
+                  {' '}
+                  {/* Increased gap */}
+                  <Select.Root value={targetLanguage} onValueChange={setTargetLanguage}>
+                    <Select.Trigger
+                      variant="soft" // Softer trigger variant
+                      aria-label={t('translationPanel.selectLanguage')}
+                    />
+                    <Select.Content>
+                      <Select.Group>
+                        {languages.map((lang) => (
+                          <Select.Item key={lang.value} value={lang.value}>
+                            {lang.label}
+                          </Select.Item>
+                        ))}
+                      </Select.Group>
+                    </Select.Content>
+                  </Select.Root>
+                </Flex>
+              )}
           </Flex>
         </Box>
 
         {!hasActiveDocument ? (
           <EmptyState
-            icon={<Languages size={48} />}
+            icon={<Languages size={52} strokeWidth={1.5} />} // Adjusted icon
             title={t('translationPanel.emptyState.noDocument.title')}
             description={t('translationPanel.emptyState.noDocument.description')}
           />
         ) : !hasContent ? (
           <EmptyState
-            icon={<Languages size={48} />}
+            icon={<Languages size={52} strokeWidth={1.5} />} // Adjusted icon
             title={t('translationPanel.emptyState.noSelection.title')}
             description={t('translationPanel.emptyState.noSelection.description')}
           />
         ) : (
           <>
-            <ScrollArea style={{ flexGrow: 1, padding: 'var(--space-3)' }}>
+            <ScrollArea style={{ flexGrow: 1, padding: 'var(--space-4)' }}>
+              {' '}
+              {/* Increased padding */}
               {/* Show errors if any */}
               {ocrError && (
                 <Box mb="4">
-                  <Flex gap="2" align="center" style={{ color: 'var(--red-9)' }}>
-                    <AlertCircle size={16} />
-                    <Text size="2" color="red">
+                  <Flex gap="2" align="center" style={{ color: 'var(--red-10)' }}>
+                    {' '}
+                    {/* Darker red */}
+                    <AlertCircle size={18} /> {/* Slightly larger icon */}
+                    <Text size="2" color="red" weight="medium">
+                      {' '}
+                      {/* Added weight */}
                       {ocrError}
                     </Text>
                   </Flex>
                 </Box>
               )}
-
               {translationError && (
                 <Box mb="4">
-                  <Flex gap="2" align="center" style={{ color: 'var(--red-9)' }}>
-                    <AlertCircle size={16} />
-                    <Text size="2" color="red">
+                  <Flex gap="2" align="center" style={{ color: 'var(--red-10)' }}>
+                    {' '}
+                    {/* Darker red */}
+                    <AlertCircle size={18} /> {/* Slightly larger icon */}
+                    <Text size="2" color="red" weight="medium">
+                      {' '}
+                      {/* Added weight */}
                       {translationError}
                     </Text>
                   </Flex>
                 </Box>
               )}
-
               {extractedText && (
                 <Box mb="4">
-                  <Heading as="h3" size="2" mb="2" color="blue">
+                  <Heading as="h3" size="3" mb="2" color="blue">
+                    {' '}
+                    {/* Adjusted size */}
                     {t('translationPanel.extractedTextTitle')}
                   </Heading>
                   <Card
                     variant="surface"
-                    style={{ backgroundColor: 'var(--blue-a2)', border: '1px solid var(--blue-6)' }}
+                    style={{
+                      backgroundColor: 'var(--blue-a3)', // Lighter alpha
+                      border: '1px solid var(--blue-a6)' // Alpha border
+                    }}
                   >
                     <Box p="3">
                       {isHtmlContent(extractedText) ? (
@@ -245,8 +266,8 @@ export function TranslationPanel({
                           style={{
                             whiteSpace: 'pre-wrap',
                             wordBreak: 'break-word',
-                            fontSize: '14px',
-                            lineHeight: '1.5',
+                            fontSize: 'var(--font-size-2)', // Use theme variable
+                            lineHeight: '1.6', // Increased for readability
                             color: 'var(--gray-12)'
                           }}
                         >
@@ -257,11 +278,12 @@ export function TranslationPanel({
                   </Card>
                 </Box>
               )}
-
               {extractedImage && (
                 <Box mb="4">
                   <Flex justify="between" align="center" mb="2">
-                    <Heading as="h3" size="2" color="green">
+                    <Heading as="h3" size="3" color="green">
+                      {' '}
+                      {/* Adjusted size */}
                       {t('translationPanel.extractedImageTitle')}
                     </Heading>
                     {!extractedText && (
@@ -272,14 +294,22 @@ export function TranslationPanel({
                         onClick={() => processImageWithOcr(extractedImage)}
                         disabled={ocrInProgress}
                       >
-                        {ocrInProgress ? <RefreshCw size={14} className="animate-spin" /> : null}
-                        {t('translationPanel.extractTextFromImage')}
+                        {ocrInProgress ? (
+                          <RefreshCw size={14} className="animate-spin" />
+                        ) : (
+                          <Languages size={14} /> // More relevant icon
+                        )}
+                        <Text ml="1">{t('translationPanel.extractTextFromImage')}</Text>{' '}
+                        {/* Added margin */}
                       </Button>
                     )}
                   </Flex>
                   <Card
                     variant="surface"
-                    style={{ backgroundColor: 'var(--jade-a2)', border: '1px solid var(--jade-6)' }}
+                    style={{
+                      backgroundColor: 'var(--jade-a3)', // Lighter alpha
+                      border: '1px solid var(--jade-a6)' // Alpha border
+                    }}
                   >
                     <Box p="3">
                       <img
@@ -305,96 +335,122 @@ export function TranslationPanel({
                   )}
                 </Box>
               )}
-
               {/* Translated content section */}
-              {hasContent && (
-                <Box mt="4">
-                  <Flex justify="between" align="center" mb="2">
-                    <Heading as="h3" size="2" color="purple">
-                      {t('translationPanel.translatedTextTitle')}
-                    </Heading>
-                    {translatedContent && (
-                      <Flex gap="2">
-                        <Tooltip
-                          content={
-                            copied ? t('translationPanel.copied') : t('translationPanel.copy')
-                          }
-                        >
-                          <IconButton size="1" variant="ghost" onClick={handleCopy}>
-                            {copied ? <Check size={14} /> : <Copy size={14} />}
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip content={t('translationPanel.share')}>
-                          <IconButton size="1" variant="ghost">
-                            <Share2 size={14} />
-                          </IconButton>
-                        </Tooltip>
-                      </Flex>
-                    )}
-                  </Flex>
-
-                  <Card
-                    variant="surface"
-                    style={{
-                      backgroundColor: translatedContent ? 'var(--purple-a2)' : 'var(--gray-a2)',
-                      border: `1px solid var(--${translatedContent ? 'purple' : 'gray'}-6)`
-                    }}
-                  >
-                    {isTranslating ? (
-                      <Flex align="center" justify="center" p="4">
-                        <RefreshCw size={20} className="animate-spin" />
-                        <Text ml="2">{t('translationPanel.translating')}</Text>
-                      </Flex>
-                    ) : translatedContent ? (
-                      <Box p="3">
-                        {isHtmlContent(translatedContent) ? (
-                          <HtmlContent content={translatedContent} />
-                        ) : (
-                          <Text
-                            as="div"
-                            style={{
-                              whiteSpace: 'pre-wrap',
-                              wordBreak: 'break-word',
-                              fontSize: '14px',
-                              lineHeight: '1.5',
-                              color: 'var(--gray-12)'
-                            }}
+              {hasActiveDocument &&
+                hasContent && ( // Show only if there's content and an active doc
+                  <Box mt="4">
+                    <Flex justify="between" align="center" mb="2">
+                      <Heading as="h3" size="3" color="purple">
+                        {' '}
+                        {/* Adjusted size */}
+                        {t('translationPanel.translatedTextTitle')}
+                      </Heading>
+                      {translatedContent && (
+                        <Flex gap="2">
+                          <Tooltip
+                            content={
+                              copied
+                                ? t('translationPanel.copied')
+                                : t('translationPanel.copyToClipboard') // More descriptive
+                            }
                           >
-                            {translatedContent}
+                            <IconButton
+                              size="1"
+                              variant={copied ? 'solid' : 'ghost'} // Visual feedback for copy
+                              color={copied ? 'green' : 'gray'} // Visual feedback for copy
+                              onClick={handleCopy}
+                            >
+                              {copied ? <Check size={14} /> : <Copy size={14} />}
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip content={t('translationPanel.share')}>
+                            <IconButton size="1" variant="ghost" disabled>
+                              {' '}
+                              {/* Disabled for now */}
+                              <Share2 size={14} />
+                            </IconButton>
+                          </Tooltip>
+                        </Flex>
+                      )}
+                    </Flex>
+
+                    <Card
+                      variant="surface"
+                      style={{
+                        backgroundColor: translatedContent
+                          ? 'var(--purple-a3)' // Lighter alpha
+                          : 'var(--gray-a3)', // Lighter alpha
+                        border: `1px solid var(--${translatedContent ? 'purple' : 'gray'}-a6)` // Alpha border
+                      }}
+                    >
+                      {isTranslating ? (
+                        <Flex align="center" justify="center" p="4" gap="2">
+                          {' '}
+                          {/* Added gap */}
+                          <RefreshCw size={20} className="animate-spin" />
+                          <Text ml="2" weight="medium">
+                            {' '}
+                            {/* Added weight */}
+                            {t('translationPanel.translating')}
                           </Text>
-                        )}
-                      </Box>
-                    ) : (
-                      <Flex align="center" justify="center" p="4">
-                        <Text color="gray" style={{ fontStyle: 'italic' }}>
-                          {t('translationPanel.notTranslatedYet')}
-                        </Text>
-                      </Flex>
-                    )}
-                  </Card>
-                </Box>
-              )}
+                        </Flex>
+                      ) : translatedContent ? (
+                        <Box p="3">
+                          {isHtmlContent(translatedContent) ? (
+                            <HtmlContent content={translatedContent} />
+                          ) : (
+                            <Text
+                              as="div"
+                              style={{
+                                whiteSpace: 'pre-wrap',
+                                wordBreak: 'break-word',
+                                fontSize: 'var(--font-size-2)', // Use theme variable
+                                lineHeight: '1.6', // Increased for readability
+                                color: 'var(--gray-12)'
+                              }}
+                            >
+                              {translatedContent}
+                            </Text>
+                          )}
+                        </Box>
+                      ) : (
+                        <Flex align="center" justify="center" p="4">
+                          <Text color="gray" style={{ fontStyle: 'italic' }}>
+                            {t('translationPanel.notTranslatedYet')}
+                          </Text>
+                        </Flex>
+                      )}
+                    </Card>
+                  </Box>
+                )}
             </ScrollArea>
 
             {/* Translation actions */}
-            {hasContent && (
-              <Box p="3" style={{ borderTop: '1px solid var(--gray-6)' }}>
-                <Flex justify="end" gap="2">
-                  <Button
-                    onClick={handleTranslate}
-                    disabled={isTranslating || !extractedText}
-                    color="blue"
-                  >
-                    {isTranslating ? <RefreshCw size={16} className="animate-spin" /> : null}
-                    {isTranslating
-                      ? t('translationPanel.translating')
-                      : translatedContent
-                        ? t('translationPanel.retranslate')
-                        : t('translationPanel.translate')}
-                  </Button>
-                </Flex>
-              </Box>
-            )}
+            {hasActiveDocument &&
+              hasContent && ( // Show only if there's content and an active doc
+                <Box p="3" style={{ borderTop: '1px solid var(--gray-a6)' }}>
+                  {' '}
+                  {/* Alpha border */}
+                  <Flex justify="end" gap="3">
+                    {' '}
+                    {/* Increased gap */}
+                    <Button
+                      onClick={handleTranslate}
+                      disabled={isTranslating || !extractedText}
+                      color="blue"
+                      variant="solid" // Explicitly solid
+                      size="2" // Consistent button size
+                    >
+                      {isTranslating ? <RefreshCw size={16} className="animate-spin mr-2" /> : null}
+                      {isTranslating
+                        ? t('translationPanel.translating')
+                        : translatedContent
+                          ? t('translationPanel.retranslate')
+                          : t('translationPanel.translate')}
+                    </Button>
+                  </Flex>
+                </Box>
+              )}
           </>
         )}
       </Flex>
@@ -409,17 +465,27 @@ style.innerHTML = `
     border-collapse: collapse;
     width: 100%;
     margin-bottom: 1rem;
+    font-size: var(--font-size-2); /* Use theme variable */
+    border: 1px solid var(--gray-a5); /* Subtle border */
+    border-radius: var(--radius-2); /* Rounded corners for table */
+    overflow: hidden; /* Clip content to rounded corners */
   }
   .html-content th, .html-content td {
-    border: 1px solid var(--gray-6);
-    padding: 8px;
+    border: 1px solid var(--gray-a5); /* Subtle border */
+    padding: var(--space-2) var(--space-3); /* Use theme spacing */
     text-align: left;
+    line-height: 1.5;
   }
   .html-content th {
-    background-color: var(--gray-3);
+    background-color: var(--gray-a3); /* Lighter header */
+    font-weight: var(--font-weight-medium); /* Medium weight for headers */
+    color: var(--gray-12);
   }
-  .html-content tr:nth-child(even) {
-    background-color: var(--gray-2);
+  .html-content tr:nth-child(even) td { /* Style even rows for better readability */
+    background-color: var(--gray-a2); /* Very subtle striping */
+  }
+  .html-content tr:hover td { /* Hover effect for rows */
+    background-color: var(--gray-a4);
   }
 `
 document.head.appendChild(style)

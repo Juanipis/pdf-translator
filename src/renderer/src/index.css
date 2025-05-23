@@ -3,4 +3,10 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden; /* Consider if this is still needed with Radix Themes */
+  background: var(--gray-1); /* Fallback background */
+  /* A subtle gradient for a more modern feel */
+  background: linear-gradient(135deg, var(--gray-2) 0%, var(--gray-1) 100%);
+  min-height: 100vh; /* Ensure gradient covers full height */
+  -webkit-font-smoothing: antialiased; /* Improve font rendering */
+  -moz-osx-font-smoothing: grayscale; /* Improve font rendering */
 }
