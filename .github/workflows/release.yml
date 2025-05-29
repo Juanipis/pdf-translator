@@ -8,9 +8,9 @@ on:
 
 # Definir los permisos necesarios para el GITHUB_TOKEN
 permissions:
-  contents: write    # Necesario para pushear tags y releases
-  issues: write      # Necesario para crear issues (en caso de error)
-  pull-requests: write  # Necesario para comentar en PRs relacionados
+  contents: write # Necesario para pushear tags y releases
+  issues: write # Necesario para crear issues (en caso de error)
+  pull-requests: write # Necesario para comentar en PRs relacionados
 
 jobs:
   version:
@@ -114,7 +114,7 @@ jobs:
     needs: [version, build]
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Necesario para crear releases y subir artefactos
+      contents: write # Necesario para crear releases y subir artefactos
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
