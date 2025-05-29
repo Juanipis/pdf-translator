@@ -14,6 +14,8 @@ Usamos un flujo de trabajo basado en ramas con las siguientes características:
 
 4. **Ramas de características (`feature/*`) o correcciones (`fix/*`)**: Aquí es donde los desarrolladores trabajan en nuevas funcionalidades o correcciones.
 
+> **¡IMPORTANTE!**: Es fundamental seguir este flujo de trabajo. Los cambios **SIEMPRE** deben seguir el camino: `feature` → `test` → `release` → `main`. Nunca hacer merge directo a `main` o saltarse ramas intermedias. Si cometes un error, consulta el archivo [WORKFLOW_RECOVERY.md](./WORKFLOW_RECOVERY.md) para solucionarlo.
+
 ## Pasos para contribuir
 
 1. **Fork y clona el repositorio**
