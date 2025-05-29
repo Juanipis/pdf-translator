@@ -108,7 +108,11 @@ jobs:
             dist/*.AppImage
             dist/*.deb
             dist/*.rpm
-          if-no-files-found: ignore
+            dist/*.snap
+            dist/*.zip
+            dist/*.tar.gz
+          if-no-files-found: warn
+          retention-days: 5
 
   upload:
     needs: [version, build]
@@ -119,21 +123,25 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          path: ./dist
+          path: ./artifacts
           merge-multiple: true
 
       - name: Display structure of downloaded files
-        run: ls -R ./dist
+        run: find ./artifacts -type f | sort
 
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ needs.version.outputs.new-release-version }}
           files: |
-            ./dist/*.exe
-            ./dist/*.dmg
-            ./dist/*.AppImage
-            ./dist/*.deb
-            ./dist/*.rpm
+            ./artifacts/**/*.exe
+            ./artifacts/**/*.dmg
+            ./artifacts/**/*.AppImage
+            ./artifacts/**/*.deb
+            ./artifacts/**/*.rpm
+            ./artifacts/**/*.snap
+            ./artifacts/**/*.zip
+            ./artifacts/**/*.tar.gz
+          fail_on_unmatched_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

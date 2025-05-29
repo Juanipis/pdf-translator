@@ -41,5 +41,3 @@ npmRebuild: false
 publish:
   provider: generic
   url: https://pdf-translator.app/auto-updates
-electronDownload:
-  mirror: https://npmmirror.com/mirrors/electron/
