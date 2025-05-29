@@ -1,3 +1,15 @@
+# [1.1.0](https://github.com/Juanipis/pdf-translator/compare/v1.0.0...v1.1.0) (2025-05-29)
+
+
+### Bug Fixes
+
+* update pull request template to use English and streamline sections ([9a7e6a0](https://github.com/Juanipis/pdf-translator/commit/9a7e6a0d3540c4603650eb2b26bba60d5b7cc0d3))
+
+
+### Features
+
+* enhance CI/CD workflows with artifact management and branch protection guidelines ([5bd82ec](https://github.com/Juanipis/pdf-translator/commit/5bd82ecd789e1a804dfc4a25a297aab1e09dcc63))
+
 # 1.0.0 (2025-05-29)
 
 
