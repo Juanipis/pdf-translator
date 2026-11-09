@@ -1,0 +1,3 @@
+provider: generic
+url: https://pdf-translator.app/auto-updates
+updaterCacheDirName: pdf-translator-updater
